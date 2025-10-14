@@ -1,0 +1,64 @@
+// @use '../../../theme' as *;
+
+
+:host {
+  display: flex;
+  justify-content: space-between;
+  border: 1px solid white;
+  height: 100%;
+  width: 900px;
+  
+}
+.register-form {
+  width: 900px;
+
+
+}
+
+mat-card{
+mat-card-title {
+    display: flex;
+    justify-content: center;
+    color: #3489eb;
+  }
+  mat-card-title{
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+  }
+
+
+  mat-grid-tile{
+    mat-form-field {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+  }
+  mat-card-actions {
+        button {
+      margin:auto;
+      width: 80%;
+    }
+    h4{
+      margin:0;
+      padding-right:1rem ;
+    }
+  }
+}
+
+
+.library-info {
+  width: 400px;
+  padding: 1rem;
+  border-left: 1px solid white;
+
+  mat-list-item{
+    height: auto;
+    p{
+      font-size: 1.2rem;
+      font-style:italic;
+      white-space: normal;
+    }
+  }
+
+}

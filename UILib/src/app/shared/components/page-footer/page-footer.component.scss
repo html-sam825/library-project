@@ -1,0 +1,11 @@
+mat-toolbar {
+   background-color: purple;
+   color: white;  
+    .spacer{
+        flex: 1 1 auto;
+    }
+    .copyright  {
+        display: flex;
+        align-items: center;
+    }
+}

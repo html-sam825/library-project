@@ -1,0 +1,15 @@
+@use '@angular/material' as mat;
+
+// Step 1: Define your theme config
+$dark-theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: mat.$teal-palette,
+    tertiary: mat.$deep-orange-palette,
+  ),
+  typography: mat.define-typography-config(), // optional
+  density: 0                                   // optional
+));
+
+// Step 2: Apply the theme globally
+@include mat.all-component-themes($dark-theme);
