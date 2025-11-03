@@ -1,17 +1,63 @@
-mat-sidenav-container {
+.sidenav-container {
   height: 100vh;
+  display: flex;
+  flex-direction: column;
 
-  mat-sidenav {
-    width: 250px;
+  .app-sidenav {
+    width: 280px;
+    background: linear-gradient(180deg, #8e24aa 0%, #6a1b9a 100%);
+    border: none;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
   }
 
-  mat-sidenav-content {
+  .sidenav-content {
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
+    position: relative;
 
-    main {
-        padding: 1rem;
-      flex: 1 1 auto;
+    .main-content {
+      flex: 1 0 auto; 
+      padding: 1rem;
+      background-color: #f5f5f5;
+      min-height: calc(100vh - 140px);
+      overflow-y: auto; 
+      
+     
+      & > * {
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+      }
     }
   }
+}
+
+
+page-footer {
+  flex-shrink: 0; 
+  position: relative;
+  z-index: 10; 
+}
+
+
+@media (max-width: 768px) {
+  .sidenav-container {
+    .app-sidenav {
+      width: 250px;
+    }
+
+    .sidenav-content {
+      .main-content {
+        padding: 0.5rem;
+        min-height: calc(100vh - 120px); 
+      }
+    }
+  }
+}
+
+
+:host {
+  display: block;
+  height: 100%;
 }

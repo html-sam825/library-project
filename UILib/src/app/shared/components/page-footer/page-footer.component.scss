@@ -1,11 +1,235 @@
-mat-toolbar {
-   background-color: purple;
-   color: white;  
-    .spacer{
-        flex: 1 1 auto;
+:host {
+  display: block;
+  margin-top: auto; 
+}
+
+.footer-toolbar {
+  background: linear-gradient(135deg, #8e24aa 0%, #6a1b9a 100%);
+  color: white;
+  padding: 1rem 2rem;
+  height: auto;
+  min-height: 70px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+    min-height: 60px;
+  }
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+    gap: 0.75rem;
+  }
+}
+
+.footer-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  @media (max-width: 768px) {
+    justify-content: center;
+    width: 100%;
+  }
+
+ 
+  &.creator-info {
+    .made-by {
+      font-size: 0.9rem;
+      opacity: 0.9;
     }
-    .copyright  {
-        display: flex;
-        align-items: center;
+
+    .heart-icon {
+      font-size: 1.1rem;
+      width: 1.1rem;
+      height: 1.1rem;
+      animation: heartbeat 2s ease-in-out infinite;
     }
+
+    .creator-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+  }
+
+ 
+  &.center-info {
+    .app-version {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      font-weight: 500;
+    }
+
+    .separator {
+      opacity: 0.6;
+      margin: 0 0.5rem;
+    }
+
+    .current-year {
+      font-size: 0.85rem;
+      opacity: 0.8;
+      font-weight: 500;
+    }
+
+    @media (max-width: 480px) {
+      flex-direction: column;
+      gap: 0.25rem;
+
+      .separator {
+        display: none;
+      }
+    }
+  }
+
+  
+  &.copyright-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+
+    @media (max-width: 768px) {
+      align-items: center;
+    }
+
+    .copyright {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+
+      .copyright-text {
+        font-size: 0.9rem;
+        opacity: 0.9;
+      }
+
+      .copyright-button {
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+          transform: scale(1.1);
+        }
+
+        mat-icon {
+          font-size: 1.1rem;
+          width: 1.1rem;
+          height: 1.1rem;
+        }
+      }
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 0.25rem;
+
+      .footer-link {
+        min-width: auto;
+        padding: 0 0.5rem;
+        border-radius: 16px;
+        font-size: 0.8rem;
+        text-transform: none;
+        letter-spacing: 0.3px;
+        transition: all 0.3s ease;
+        color: rgba(255, 255, 255, 0.8);
+
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.1);
+          color: white;
+          transform: translateY(-1px);
+        }
+
+        mat-icon {
+          font-size: 1rem;
+          width: 1rem;
+          height: 1rem;
+          margin-right: 0.25rem;
+        }
+
+        .link-text {
+          @media (max-width: 480px) {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+
+@media (max-width: 480px) {
+  .footer-toolbar {
+    padding: 0.75rem 1rem;
+  }
+
+  .footer-content {
+    gap: 0.5rem;
+  }
+
+  .footer-section {
+    &.creator-info,
+    &.center-info {
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    &.creator-info {
+      .made-by,
+      .creator-name {
+        font-size: 0.85rem;
+      }
+    }
+
+    &.center-info {
+      .app-version,
+      .current-year {
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+
+:host(.fixed-footer) {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+
+:host(.sticky-footer) {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }

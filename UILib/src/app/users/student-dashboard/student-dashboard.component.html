@@ -1,0 +1,285 @@
+<div class="student-dashboard">
+  <!-- Loading Overlay -->
+  <div *ngIf="isLoading" class="loading-overlay">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading your dashboard...</p>
+  </div>
+
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1 class="page-title">Student Dashboard</h1>
+      <div class="header-actions">
+        <button mat-raised-button color="primary" (click)="refreshData()" [disabled]="isLoading">
+          <mat-icon>refresh</mat-icon>
+          {{ isLoading ? 'Loading...' : 'Refresh' }}
+        </button>
+      </div>
+    </div>
+    <p class="page-subtitle">
+      Welcome back, {{ studentName }}! Here's your library overview.
+    </p>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <!-- Current Books -->
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon current-books">
+            <mat-icon>book</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3 class="stat-number">{{ stats.currentBooks | number }}</h3>
+            <p class="stat-label">Current Books</p>
+            <span class="stat-trend neutral">
+              <mat-icon>import_contacts</mat-icon>
+              {{ stats.booksRemaining }} more available
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Pending Orders -->
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon pending-orders">
+            <mat-icon>pending_actions</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3 class="stat-number">{{ stats.pendingOrders | number }}</h3>
+            <p class="stat-label">Pending Orders</p>
+            <span class="stat-trend neutral">
+              <mat-icon>schedule</mat-icon>
+              Waiting for approval
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Overdue Books -->
+    <mat-card class="stat-card" *ngIf="stats.overdueBooks > 0">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon overdue-books">
+            <mat-icon>warning</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3 class="stat-number">{{ stats.overdueBooks | number }}</h3>
+            <p class="stat-label">Overdue Books</p>
+            <span class="stat-trend warning">
+              <mat-icon>error</mat-icon>
+              Please return soon
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Total Fines -->
+    <mat-card class="stat-card" *ngIf="stats.totalFines > 0">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon total-fines">
+            <mat-icon>payments</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3 class="stat-number">Kshs {{ stats.totalFines | number }}</h3>
+            <p class="stat-label">Total Fines</p>
+            <span class="stat-trend warning">
+              <mat-icon>info</mat-icon>
+              Payment required
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="content-grid">
+    <!-- Current Books -->
+    <mat-card class="content-card current-books-section">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>bookmark</mat-icon>
+          My Current Books
+        </mat-card-title>
+        <button mat-button color="primary" (click)="navigateTo('book-store')">
+          Borrow More
+        </button>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="books-list">
+          <div class="book-item" *ngFor="let book of currentBooks">
+            <div class="book-cover">
+              <mat-icon>menu_book</mat-icon>
+            </div>
+            <div class="book-details">
+              <h4>{{ book.bookTitle }}</h4>
+              <p class="book-meta">Ordered: {{ book.orderDate | date }}</p>
+              <p class="book-meta" *ngIf="book.returnDate">
+                Due: {{ book.returnDate | date }}
+              </p>
+              <span 
+                class="status-badge" 
+                [class.overdue]="isBookOverdue(book)"
+                [class.normal]="!isBookOverdue(book)"
+              >
+                <mat-icon>{{ isBookOverdue(book) ? 'warning' : 'check_circle' }}</mat-icon>
+                {{ isBookOverdue(book) ? 'Overdue' : 'On Time' }}
+              </span>
+            </div>
+            <div class="book-actions">
+              <button 
+                mat-raised-button 
+                color="primary" 
+                (click)="returnBook(book)"
+                *ngIf="!isBookOverdue(book)"
+              >
+                <mat-icon>assignment_return</mat-icon>
+                Return
+              </button>
+              <button 
+                mat-raised-button 
+                color="warn" 
+                (click)="returnBook(book)"
+                *ngIf="isBookOverdue(book)"
+              >
+                <mat-icon>warning</mat-icon>
+                Return & Pay Fine
+              </button>
+            </div>
+          </div>
+          <div class="no-data" *ngIf="currentBooks.length === 0">
+            <mat-icon>book</mat-icon>
+            <h3>No books currently borrowed</h3>
+            <p>Visit the book store to borrow some books!</p>
+            <button mat-raised-button color="primary" (click)="navigateTo('book-store')">
+              <mat-icon>local_library</mat-icon>
+              Browse Books
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Quick Actions -->
+    <mat-card class="content-card quick-actions">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>flash_on</mat-icon>
+          Quick Actions
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="actions-grid">
+          <button
+            mat-stroked-button
+            class="action-btn"
+            (click)="navigateTo('book-store')"
+          >
+            <mat-icon>local_library</mat-icon>
+            Browse Books
+          </button>
+          <button
+            mat-stroked-button
+            class="action-btn"
+            (click)="navigateTo('my-orders')"
+          >
+            <mat-icon>history</mat-icon>
+            My Order History
+          </button>
+          <button
+            mat-stroked-button
+            class="action-btn"
+            (click)="navigateTo('profile')"
+          >
+            <mat-icon>person</mat-icon>
+            My Profile
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Pending Orders -->
+    <mat-card class="content-card pending-orders-section" *ngIf="pendingOrders.length > 0">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>schedule</mat-icon>
+          Pending Approval
+        </mat-card-title>
+        <button mat-button color="primary" (click)="navigateTo('my-orders')">
+          View All
+        </button>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="orders-list">
+          <div class="order-item" *ngFor="let order of pendingOrders">
+            <div class="order-icon">
+              <mat-icon>pending</mat-icon>
+            </div>
+            <div class="order-details">
+              <h4>{{ order.bookTitle }}</h4>
+              <p class="order-meta">Requested: {{ order.orderDate | date }}</p>
+              <span class="status-badge pending">
+                <mat-icon>schedule</mat-icon>
+                Waiting for admin approval
+              </span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Account Status -->
+    <mat-card class="content-card account-status">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>account_circle</mat-icon>
+          Account Status
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="status-items">
+          <div class="status-item">
+            <div class="status-info">
+              <span class="status-label">Account Type</span>
+              <span class="status-value">{{ accountInfo.userType }}</span>
+            </div>
+            <mat-icon class="status-icon">school</mat-icon>
+          </div>
+          <div class="status-item">
+            <div class="status-info">
+              <span class="status-label">Status</span>
+              <span class="status-value" [class]="accountInfo.statusClass">
+                {{ accountInfo.status }}
+              </span>
+            </div>
+            <mat-icon class="status-icon" [class]="accountInfo.statusClass">
+              {{ accountInfo.statusIcon }}
+            </mat-icon>
+          </div>
+          <div class="status-item">
+            <div class="status-info">
+              <span class="status-label">Book Limit</span>
+              <span class="status-value">{{ accountInfo.bookLimit }} books</span>
+            </div>
+            <mat-icon class="status-icon">library_books</mat-icon>
+          </div>
+          <div class="status-item" *ngIf="accountInfo.fines > 0">
+            <div class="status-info">
+              <span class="status-label">Outstanding Fines</span>
+              <span class="status-value warning">Kshs {{ accountInfo.fines }}</span>
+            </div>
+            <mat-icon class="status-icon warning">payments</mat-icon>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

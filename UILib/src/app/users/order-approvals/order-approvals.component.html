@@ -1,0 +1,61 @@
+<div class="order-approvals-container">
+  <div *ngIf="isLoading" class="loading-section">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading pending orders...</p>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <!-- Header Card -->
+    <mat-card class="header-card">
+      <mat-card-content class="header-content">
+        <div class="title-section">
+          <h1>
+            <mat-icon>pending_actions</mat-icon>
+            Pending Order Approvals ({{ pendingOrders.length }})
+          </h1>
+          <p class="subtitle">
+            Book orders waiting for admin approval
+          </p>
+        </div>
+
+        <div class="action-buttons" *ngIf="pendingOrders.length > 0">
+          <button
+            mat-stroked-button
+            color="accent"
+            (click)="refresh()"
+            class="action-button"
+          >
+            <mat-icon>refresh</mat-icon>
+            Refresh
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Orders Table -->
+    <div *ngIf="pendingOrders.length > 0" class="table-section">
+      <page-table
+        [columns]="columns"
+        [dataSource]="pendingOrders"
+        [tableType]="'orders'"
+        (approveOrder)="approveOrder($event)"
+        (rejectOrder)="rejectOrder($event)"
+      ></page-table>
+    </div>
+
+    <div *ngIf="pendingOrders.length === 0" class="empty-state">
+      <mat-icon>check_circle_outline</mat-icon>
+      <h2>No Pending Orders</h2>
+      <p>All book orders have been processed. Great work!</p>
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="refresh()"
+        class="refresh-button"
+      >
+        <mat-icon>refresh</mat-icon>
+        Check for New Orders
+      </button>
+    </div>
+  </div>
+</div>

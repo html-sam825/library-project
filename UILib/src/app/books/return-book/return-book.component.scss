@@ -1,37 +1,235 @@
-mat-card{
-  width: max-content;
-  
-  mat-form-field {
-    margin-right: 1rem;
-  }
-  .fine{
-    display: flex;
-    gap: 1rem;
-    justify-content: space-between;
-    margin-bottom: 1rem;
-
-    button {
-      width: max-content;
-    }
-    span{
-    border: 1px solid black;
-    flex:1 1 auto;  
-    display:flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    letter-spacing: 5px;
-    font-style: italic;
-  }
-  
-
-  }
-  
+:host {
+  display: block;
+  padding: 2rem;
 }
 
-button{
-  font-size: 1.5rem;
-  padding:1.5rem;
+.return-book-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.return-card {
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  mat-card-header {
+    margin-bottom: 2rem;
+
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.75rem;
+      color: #3489eb;
+      margin: 0;
+
+      mat-icon {
+        color: #3489eb;
+      }
+    }
+
+    mat-card-subtitle {
+      font-size: 1rem;
+      color: #666;
+      margin-top: 0.5rem;
+    }
+  }
+}
+
+.form-fields {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+
+  mat-form-field {
+    flex: 1;
+    min-width: 200px;
+
+    &.user-field,
+    &.book-field {
+      flex: 1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.fine-section {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+
+  .fine-button {
+    min-width: 160px;
+    height: 48px;
+    font-weight: 500;
+
+    .button-spinner {
+      margin-right: 0.5rem;
+    }
+
+    mat-icon {
+      margin-right: 0.5rem;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+  .fine-display {
+    flex: 1;
+    min-width: 200px;
+    padding: 1rem;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+
+    &.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    &.has-fine {
+      border-color: #f44336;
+      background-color: rgba(244, 67, 54, 0.05);
+    }
+
+    &.no-fine {
+      border-color: #4caf50;
+      background-color: rgba(76, 175, 80, 0.05);
+    }
+
+    .fine-amount {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+
+      mat-icon {
+        font-size: 1.5rem;
+        
+        &:first-child {
+          color: #4caf50;
+        }
+        
+        &:last-child {
+          color: #f44336;
+        }
+      }
+
+      .fine-text {
+        font-size: 1.5rem;
+        font-weight: bold;
+        letter-spacing: 2px;
+        color: #333;
+      }
+    }
+
+    .fine-status {
+      font-size: 0.9rem;
+      color: #666;
+      font-style: italic;
+    }
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+
+    .fine-button {
+      width: 100%;
+    }
+  }
+}
+
+.return-button {
   width: 100%;
+  height: 56px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+
+  mat-icon {
+    margin-right: 0.75rem;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.order-details {
+  margin-top: 1.5rem;
+
+  .details-card {
+    background-color: #f8f9fa;
+    border-left: 4px solid #3489eb;
+
+    mat-card-header {
+      margin-bottom: 1rem;
+
+      mat-card-title {
+        font-size: 1.2rem;
+        color: #3489eb;
+      }
+    }
+
+    .detail-item {
+      margin-bottom: 0.5rem;
+      padding: 0.25rem 0;
+
+      strong {
+        color: #333;
+        margin-right: 0.5rem;
+      }
+    }
+  }
+}
+
+
+::ng-deep .success-snackbar {
+  background: #4caf50;
+  color: white;
+}
+
+::ng-deep .error-snackbar {
+  background: #f44336;
+  color: white;
+}
+
+::ng-deep .info-snackbar {
+  background: #2196f3;
+  color: white;
+}
+
+
+@media (max-width: 768px) {
+  :host {
+    padding: 1rem;
+  }
+
+  .return-card {
+    padding: 1.5rem;
+  }
+
+  .form-fields {
+    mat-form-field {
+      min-width: 100%;
+    }
+  }
 }

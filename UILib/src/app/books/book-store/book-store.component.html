@@ -1,85 +1,150 @@
-<mat-form-field color="accent" appearance="outline">
-    <mat-label>Search Books</mat-label>
-    <input matInput (input)="searchBooks(searchField.value)" #searchField>
-    <button mat-icon-button matSuffix>
+<div class="book-store-container">
+  <!-- Search Section -->
+  <div class="search-section">
+    <mat-form-field color="accent" appearance="outline" class="search-field">
+      <mat-label>Search Books</mat-label>
+      <input
+        matInput
+        (input)="searchBooks(searchField.value)"
+        #searchField
+        placeholder="Search by title, author, or category..."
+      />
+      <button mat-icon-button matSuffix>
         <mat-icon>search</mat-icon>
-    </button>
-</mat-form-field>
+      </button>
+    </mat-form-field>
+  </div>
 
+  <!-- Results Count -->
+  <mat-card class="results-card">
+    <mat-card-content>
+      <div class="results-info">
+        <mat-icon>library_books</mat-icon>
+        <span
+          >Showing {{ getBookCount() }} Book{{
+            getBookCount() !== 1 ? "s" : ""
+          }}</span
+        >
+        <span class="search-term" *ngIf="searchTerm">
+          for "{{ searchTerm }}"
+        </span>
+      </div>
+    </mat-card-content>
+  </mat-card>
 
-<mat-card>
-  <mat-card-content>
-    Showing Results for {{ getBookCount() }} Books
-  </mat-card-content>
-</mat-card>
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-section">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading books...</p>
+  </div>
 
-<mat-accordion multi="true">
-  @for (item of booksToDisplay; track booksToDisplay){
-  <mat-expansion-panel [expanded]="true">
-    <mat-expansion-panel-header>
-      <mat-panel-title>{{ item.category | titlecase }}</mat-panel-title>
-      <mat-panel-description>{{
-        item.subCategory | titlecase
-      }}</mat-panel-description>
-    </mat-expansion-panel-header>
+  <!-- Books List -->
+  <div *ngIf="!isLoading">
 
-    <table mat-table [dataSource]="item.books">
-      <!-- id column -->
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef>ID</th>
-        <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-      </ng-container>
+    <div *ngIf="booksToDisplay.length === 0" class="no-results">
+      <mat-icon>search_off</mat-icon>
+      <h3>No books found</h3>
+      <p *ngIf="searchTerm">Try adjusting your search terms</p>
+      <button
+        mat-raised-button
+        color="accent"
+        *ngIf="searchTerm"
+        (click)="searchBooks(''); searchField.value = ''"
+      >
+        Clear Search
+      </button>
+    </div>
 
-      <!-- Book Title Column -->
+    <!-- Books Accordion -->
+    <mat-accordion multi="true" *ngIf="booksToDisplay.length > 0">
+      @for (item of booksToDisplay; track item.bookCategoryId) {
+      <mat-expansion-panel [expanded]="true" class="category-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <mat-icon class="category-icon">category</mat-icon>
+            {{ item.category | titlecase }}
+          </mat-panel-title>
+          <mat-panel-description>
+            <mat-icon class="subcategory-icon">folder</mat-icon>
+            {{ item.subCategory | titlecase }}
+            <span class="book-count"
+              >({{ item.books.length }} book{{
+                item.books.length !== 1 ? "s" : ""
+              }})</span
+            >
+          </mat-panel-description>
+        </mat-expansion-panel-header>
 
-      <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef>Title</th>
-        <td mat-cell *matCellDef="let element">{{ element.title }}</td>
-      </ng-container>
+        <!-- Fixed Table Structure -->
+        <table mat-table [dataSource]="item.books" class="books-table">
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+          </ng-container>
 
-      <!-- Author Column -->
-      <ng-container matColumnDef="author">
-        <th mat-header-cell *matHeaderCellDef>Book Author</th>
-        <td mat-cell *matCellDef="let element">{{ element.author }}</td>
-      </ng-container>
+          <!-- Title Column -->
+          <ng-container matColumnDef="title">
+            <th mat-header-cell *matHeaderCellDef>Title</th>
+            <td mat-cell *matCellDef="let element" class="title-cell">
+              <strong>{{ element.title }}</strong>
+            </td>
+          </ng-container>
 
-      <!-- prize Column -->
+          <!-- Author Column -->
+          <ng-container matColumnDef="author">
+            <th mat-header-cell *matHeaderCellDef>Author</th>
+            <td mat-cell *matCellDef="let element">{{ element.author }}</td>
+          </ng-container>
 
-      <ng-container matColumnDef="price">
-        <th mat-header-cell *matHeaderCellDef>Price</th>
-        <td mat-cell *matCellDef="let element">{{ element.price }}</td>
-      </ng-container>
-      <!-- Available Column -->
+          <!-- Price Column -->
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef>Price</th>
+            <td mat-cell *matCellDef="let element" class="price-cell">
+              KSH {{ element.price }}
+            </td>
+          </ng-container>
 
-      <ng-container matColumnDef="available">
-        <th mat-header-cell *matHeaderCellDef>Available</th>
+          <!-- Available Column -->
+           <ng-container matColumnDef="available">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
         <td mat-cell *matCellDef="let element">
-          {{ element.ordered ? "Not Available" : "Available" }}
+          <span
+            [class]="getStatusBadgeClass(element)"
+            class="status-badge"
+          >
+            <mat-icon>{{
+              element.ordered ? (element.orderStatus === 'APPROVED' ? 'book' : 'schedule') : 'check_circle'
+            }}</mat-icon>
+            {{ getStatusBadgeText(element) }}
+          </span>
         </td>
       </ng-container>
+
       <!-- Order Column -->
       <ng-container matColumnDef="order">
-        <th mat-header-cell *matHeaderCellDef>Order</th>
+        <th mat-header-cell *matHeaderCellDef>Action</th>
         <td mat-cell *matCellDef="let element">
           <button
-            mat--raised-button
-            color="accent"
-            [disabled]="element.ordered"
-            (click)="orderBook(element)"
+            mat-raised-button
+            [color]="getOrderButtonColor(element)"
+            [disabled]="isOrderButtonDisabled(element)"
+            (click)="onButtonClick(element)"
+            [matTooltip]="getOrderButtonTooltip(element)"
+            class="order-button"
           >
-            Order
+            <mat-icon>{{ getOrderButtonIcon(element) }}</mat-icon>
+            {{ getOrderButtonText(element) }}
           </button>
         </td>
       </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    </table>
-  </mat-expansion-panel>
-  }
 
-  <!-- <mat-list>
-    <mat-list-item *ngFor="let book of books">
-      {{ book.title }} by {{ book.author }}
-    </mat-list-item>
-  </mat-list> -->
-</mat-accordion>
+          <!-- Header Row -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </mat-expansion-panel>
+      }
+    </mat-accordion>
+  </div>
+</div>

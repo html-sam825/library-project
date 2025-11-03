@@ -1,0 +1,49 @@
+
+
+.status-badge {
+  /
+
+  
+  &.approved {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #2e7d32;
+  }
+
+  &.pending {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: #ff8f00;
+  }
+
+  &.returned {
+    background-color: rgba(33, 150, 243, 0.1);
+    color: #1565c0;
+  }
+
+  &.rejected {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: #c62828;
+  }
+}
+
+
+.action-button {
+  
+
+  &[color="primary"] {
+    background-color: #4caf50;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: #43a047;
+    }
+  }
+
+  &[color="warn"] {
+    background-color: #f44336;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: #d32f2f;
+    }
+  }
+}

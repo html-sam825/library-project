@@ -1,10 +1,42 @@
-<mat-toolbar color="primary">
-  <span>Made By: Samwel Murunga</span>
-  <span class="spacer"></span>
-  <div class="copyright">
-    <span>copyright 2024</span>
-    <button mat-icon-button>
-      <mat-icon>copyright</mat-icon>
-    </button>
+<mat-toolbar color="primary" class="footer-toolbar">
+  <div class="footer-content">
+    <div class="footer-section creator-info">
+      <span class="made-by">Made with</span>
+      <mat-icon class="heart-icon" color="warn">favorite</mat-icon>
+      <span class="creator-name">by Samwel Murunga</span>
+    </div>
+   <div class="footer-section center-info">
+      <span class="app-version">Library Management System v{{ appVersion }}</span>
+      <span class="separator">•</span>
+      <span class="current-year">{{ currentYear }}</span>
+    </div>  
+    <div class="footer-section copyright-section">
+      <div class="copyright">
+        <span class="copyright-text">Copyright {{ currentYear }}</span>
+        <button mat-icon-button color="accent" class="copyright-button" matTooltip="All rights reserved">
+          <mat-icon>copyright</mat-icon>
+        </button>
+      </div>   
+      <div class="footer-links">
+        <button mat-button color="accent" class="footer-link" 
+                matTooltip="Privacy Policy"
+                (click)="openPrivacyPolicy()">
+          <mat-icon>privacy_tip</mat-icon>
+          <span class="link-text">Privacy</span>
+        </button>
+        <button mat-button color="accent" class="footer-link" 
+                matTooltip="Terms of Service"
+                (click)="openTermsOfService()">
+          <mat-icon>description</mat-icon>
+          <span class="link-text">Terms</span>
+        </button>
+        <button mat-button color="accent" class="footer-link" 
+                matTooltip="Contact Support"
+                (click)="contactSupport()">
+          <mat-icon>support</mat-icon>
+          <span class="link-text">Support</span>
+        </button>
+      </div>
+    </div>
   </div>
 </mat-toolbar>

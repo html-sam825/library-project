@@ -1,35 +1,121 @@
-:host{
+:host {
   display: block;
   width: 400px;
   background-color: #E0F2F1;
 }
 
 mat-card {
+  padding: 2rem 1.5rem;
+  
   mat-card-header {
-    display:flex;
+    display: flex;
     justify-content: center;
+    margin-bottom: 1.5rem;
 
-  mat-card-title {
-    font-size: 2rem;
-    color:#3489eb
+    mat-card-title {
+      font-size: 2rem;
+      color: #3489eb;
+      font-weight: 600;
+    }
+  }
 
+  mat-card-content {
+    padding: 0;
+    
+    .full-width {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+
+    .login-button {
+      height: 48px;
+      font-size: 1.1rem;
+      margin-top: 0.5rem;
+      
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+    }
+
+    .spinner {
+      display: inline-block;
+      margin-right: 8px;
+    }
+  }
+
+  .footer-actions {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e0e0e0;
+    
+    .register-section {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      
+      h4 {
+        margin: 0;
+        color: #666;
+        font-weight: 500;
+      }
+      
+      a {
+        text-decoration: none;
+        
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
 }
-mat-form-feld {
+
+
+@media (max-width: 480px) {
+  :host {
     width: 100%;
-    padding-top: 1rem;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 1rem;
   }
-  mat-card-actions {
-   button{
-      margin: auto;
-      width: 90%;
-   }
-   h4{
-      margin: 0;
-      padding-right: 3rem;
+  
+  mat-card {
+    padding: 1.5rem 1rem;
+    
+    mat-card-header mat-card-title {
+      font-size: 1.75rem;
     }
-   }
+    
+    .footer-actions .register-section {
+      flex-direction: column;
+      gap: 0.5rem;
+      
+      h4 {
+        padding-right: 0;
+      }
     }
+  }
+}
 
 
-
+::ng-deep .mat-snack-bar-container {
+  &.error-snackbar {
+    background: #f44336;
+    color: white;
+    
+    .mat-simple-snackbar-action {
+      color: white;
+    }
+  }
+  
+  &.success-snackbar {
+    background: #4caf50;
+    color: white;
+    
+    .mat-simple-snackbar-action {
+      color: white;
+    }
+  }
+}

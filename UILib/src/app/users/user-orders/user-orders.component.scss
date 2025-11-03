@@ -1,18 +1,247 @@
-mat-card {
-    width: max-content;
+.user-orders-container {
+  padding: 1rem;
+}
+
+.loading-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  color: #666;
+
+  p {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+  }
+}
+
+.section-header {
+  margin-bottom: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  &.section-header .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .title-section {
+    flex: 1;
+
+    h2 {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      color: #3489eb;
+      margin: 0 0 0.5rem 0;
+
+      mat-icon {
+        color: #3489eb;
+      }
+    }
+
+    .subtitle {
+      color: #666;
+      margin: 0;
+
+      .total-fines {
+        color: #c62828;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .refresh-button {
+    min-width: 120px;
+    height: 40px;
+
+    mat-icon {
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+.table-section {
+  margin-bottom: 2rem;
+}
+
+.orders-info {
+  margin-top: 1rem;
+
+  .info-card {
+    background-color: #f8f9fa;
+    border-left: 4px solid #3489eb;
+
+    .info-items {
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        border-bottom: 1px solid #e0e0e0;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        mat-icon {
+          color: #3489eb;
+          flex-shrink: 0;
+        }
+
+        .book-info {
+          flex: 1;
+
+          strong {
+            display: block;
+            color: #333;
+            margin-bottom: 0.25rem;
+          }
+
+          .due-info {
+            font-size: 0.9rem;
+            color: #666;
+
+            &.overdue {
+              color: #c62828;
+              font-weight: 500;
+            }
+          }
+        }
+
+        .fine-amount {
+          color: #c62828;
+          font-weight: 500;
+          font-size: 0.9rem;
+        }
+      }
+    }
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  border: 2px dashed #e0e0e0;
+  margin: 1rem 0;
+
+  mat-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
     margin-bottom: 1rem;
+    color: #ccc;
+  }
+
+  h3 {
+    margin: 0 0 1rem 0;
+    color: #444;
+    font-size: 1.25rem;
+  }
+
+  p {
+    margin: 0 0 2rem 0;
+    color: #666;
+    max-width: 300px;
+    line-height: 1.5;
+  }
+
+  .browse-button {
+    min-width: 160px;
+
+    mat-icon {
+      margin-right: 0.5rem;
+      font-size: 1.2rem;
+      width: 1.2rem;
+      height: 1.2rem;
+      color: inherit;
+    }
+  }
 }
-.returned{
-    mat-card {
-        margin-top: 2rem;
-    }
+
+.completed-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e0e0e0;
 }
-table{
-    .mat-mdc-cell,
-    .mat-mdc-header-cell{
-      font-size: 1.1rem;
+
+.error-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+
+  .error-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    color: #f44336;
+    margin-bottom: 1rem;
+  }
+
+  h2 {
+    color: #333;
+    margin: 0 0 1rem 0;
+  }
+
+  p {
+    color: #666;
+    margin: 0 0 2rem 0;
+    line-height: 1.5;
+  }
+
+  .login-button {
+    min-width: 160px;
+
+    mat-icon {
+      margin-right: 0.5rem;
     }
-    .mat-mdc-header-cell{
-      font-style: italic;
+  }
+}
+
+
+::ng-deep .error-snackbar {
+  background: #f44336;
+  color: white;
+}
+
+::ng-deep .info-snackbar {
+  background: #2196f3;
+  color: white;
+}
+
+
+@media (max-width: 768px) {
+  .user-orders-container {
+    padding: 0.5rem;
+  }
+
+  .section-header .header-content {
+    flex-direction: column;
+    align-items: stretch;
+
+    .refresh-button {
+      align-self: flex-end;
     }
+  }
+
+  .orders-info .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
 }

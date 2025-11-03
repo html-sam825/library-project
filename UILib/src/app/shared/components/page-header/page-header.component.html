@@ -1,14 +1,102 @@
-<mat-toolbar color="primary">
-  <span>Library Management System</span>
-
-  <div class="user-info">
-    @if (loggedIn){
-    <div class="name">Hi, {{ name }}</div>
-    }
-
-    <button mat-raised-button color="accent" routerLink="/profile">
-      Profile
+<mat-toolbar color="primary" class="header-toolbar">
+ 
+  <div class="left-section">
+    <button 
+      mat-icon-button 
+      class="menu-button"
+      (click)="toggleSidenav.emit()"
+      *ngIf="showMenuButton">
+      <mat-icon>menu</mat-icon>
     </button>
-    <button mat-raised-button color="warn" (click)="logout()">Log Out</button>
+    
+    <div class="logo-section" (click)="navigateToDashboard()">
+      <mat-icon class="logo-icon">library_books</mat-icon>
+      <span class="app-title">Library Management System</span>
+    </div>
+  </div>
+
+ 
+  <div class="center-section" *ngIf="loggedIn && isUserApproved()">
+    <nav class="nav-links">
+      <a  href=""
+        mat-button 
+        *ngFor="let link of filteredQuickLinks"
+        [routerLink]="link.route"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: false }">
+        <mat-icon class="link-icon">{{ link.icon }}</mat-icon>
+        {{ link.label }}
+      </a>
+    </nav>
+  </div>
+
+
+  <div class="right-section">
+    @if (loggedIn) {
+      <div class="user-info">
+        
+        <div class="user-greeting">
+          <mat-icon class="user-avatar">account_circle</mat-icon>
+          <div class="user-details">
+            <span class="user-name">{{ getGreeting() }}, {{ name }}</span>
+            <span class="user-role">{{ getUserBadgeText() }} • {{ getAccountStatusText() }}</span>
+          </div>
+        </div>
+
+        
+        <button 
+          mat-icon-button 
+          [matBadge]="notificationCount" 
+          [matBadgeHidden]="notificationCount === 0"
+          matBadgeColor="warn"
+          matBadgeSize="small"
+          (click)="openNotifications()"
+          [matTooltip]="'Notifications (' + notificationCount + ')'">
+          <mat-icon>notifications</mat-icon>
+        </button>
+
+      
+        <button 
+          mat-raised-button 
+          color="accent" 
+          routerLink="/profile"
+          class="profile-button"
+          matTooltip="View Profile">
+          <mat-icon>person</mat-icon>
+          Profile
+        </button>
+
+        
+        <button 
+          mat-raised-button 
+          color="warn" 
+          (click)="logout()"
+          class="logout-button"
+          matTooltip="Logout">
+          <mat-icon>logout</mat-icon>
+          Log Out
+        </button>
+      </div>
+    } @else {
+     
+      <div class="guest-actions">
+        <button 
+          mat-button 
+          color="accent" 
+          routerLink="/login"
+          class="login-button">
+          <mat-icon>login</mat-icon>
+          Login
+        </button>
+        <button 
+          mat-raised-button 
+          color="accent" 
+          routerLink="/signup"
+          class="signup-button">
+          <mat-icon>person_add</mat-icon>
+          Sign Up
+        </button>
+      </div>
+    }
   </div>
 </mat-toolbar>

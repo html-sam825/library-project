@@ -7,7 +7,10 @@ import { PageSideNavComponent } from './components/page-side-nav/page-side-nav.c
 import { RouterModule } from '@angular/router';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { PageTableComponent } from './page-table/page-table.component';
+import { PageTableComponent } from './components/page-table/page-table.component';
+
+
+
 
 
 
@@ -17,7 +20,8 @@ import { PageTableComponent } from './page-table/page-table.component';
     PageFooterComponent,
     PageSideNavComponent,
     PageNotFoundComponent,
-    PageTableComponent
+    PageTableComponent,
+ 
   ],
   imports: [  
     CommonModule, MaterialModule, RouterModule,ReactiveFormsModule, FormsModule
@@ -30,7 +34,7 @@ import { PageTableComponent } from './page-table/page-table.component';
     PageSideNavComponent,
     RouterModule,
     PageNotFoundComponent,
-    PageTableComponent,
+    PageTableComponent,  
     ReactiveFormsModule,
     FormsModule]
 })

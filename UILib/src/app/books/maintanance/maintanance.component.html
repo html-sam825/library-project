@@ -1,82 +1,222 @@
-<mat-card>
-  <mat-card-header>
-    <h1>Add New Category</h1>
-  </mat-card-header>
-  <mat-card-content [formGroup]="newCategory">
-    <mat-form-field color="accent">
-      <mat-label>Category</mat-label>
-      <input matInput formControlName="category" />
-    </mat-form-field>
+<div class="maintenance-container">
+  <!-- Add New Category Card -->
+  <mat-card class="maintenance-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>category</mat-icon>
+        Add New Category
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="newCategory" (ngSubmit)="addCategory()">
+        <div class="form-row">
+          <mat-form-field color="accent" appearance="outline">
+            <mat-label>Category</mat-label>
+            <input
+              matInput
+              formControlName="category"
+              placeholder="Enter category name"
+            />
+            <mat-icon matSuffix>label</mat-icon>
+            <mat-error *ngIf="category?.hasError('required')">
+              Category is required
+            </mat-error>
+            <mat-error *ngIf="category?.hasError('minlength')">
+              Category must be at least 2 characters
+            </mat-error>
+          </mat-form-field>
 
-    <mat-form-field color="accent">
-      <mat-label>SubCategory</mat-label>
-      <input matInput formControlName="subCategory" />
-    </mat-form-field>
+          <mat-form-field color="accent" appearance="outline">
+            <mat-label>SubCategory</mat-label>
+            <input
+              matInput
+              formControlName="subCategory"
+              placeholder="Enter subcategory"
+            />
+            <mat-icon matSuffix>subdirectory_arrow_right</mat-icon>
+            <mat-error *ngIf="subCategory?.hasError('required')">
+              Subcategory is required
+            </mat-error>
+            <mat-error *ngIf="subCategory?.hasError('minlength')">
+              Subcategory must be at least 2 characters
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-    <button
-      mat-stroked-button
-      color="accent"
-      [disabled]="newCategory.invalid"
-      (click)="addCategory()"
-    >
-      Add
-    </button>
-  </mat-card-content>
-</mat-card>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="newCategory.invalid"
+          class="action-button"
+        >
+          <mat-icon>add_circle</mat-icon>
+          Add Category
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
 
-<mat-card>
-  <mat-card-header>
-    <h1>Add New Book</h1>
-  </mat-card-header>
+  <!-- Add New Book Card -->
+  <mat-card class="maintenance-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>menu_book</mat-icon>
+        Add New Book
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="newBook" (ngSubmit)="addNewBook()">
+        <div class="form-row">
+          <mat-form-field
+            color="accent"
+            appearance="outline"
+            class="book-title"
+          >
+            <mat-label>Book Title</mat-label>
+            <input
+              matInput
+              formControlName="title"
+              placeholder="Enter book title"
+            />
+            <mat-icon matSuffix>title</mat-icon>
+            <mat-error *ngIf="title?.hasError('required')">
+              Book title is required
+            </mat-error>
+            <mat-error *ngIf="title?.hasError('minlength')">
+              Title must be at least 2 characters
+            </mat-error>
+          </mat-form-field>
 
-  <mat-card-content [formGroup]="newBook">
-    <mat-form-field color="accent" class="book-title">
-      <mat-label>Book Title</mat-label>
-      <input matIput formControlName="title" />
-    </mat-form-field>
+          <mat-form-field
+            color="accent"
+            appearance="outline"
+            class="book-author"
+          >
+            <mat-label>Book Author</mat-label>
+            <input
+              matInput
+              formControlName="author"
+              placeholder="Enter author name"
+            />
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="author?.hasError('required')">
+              Author is required
+            </mat-error>
+            <mat-error *ngIf="author?.hasError('minlength')">
+              Author name must be at least 2 characters
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-    <mat-form-field color="accent" class="book-author">
-      <mat-label>Book Author</mat-label>
-      <input matInput formControlName="author" />
-    </mat-form-field>
-  </mat-card-content>
+        <div class="form-row">
+          <mat-form-field
+            color="accent"
+            appearance="outline"
+            class="book-price"
+          >
+            <mat-label>Book Price(KSH)</mat-label>
+            <input
+              matInput
+              formControlName="price"
+              type="number"
+              min="0"
+              placeholder="0"
+            />
+            <mat-icon matSuffix>attach_money</mat-icon>
+            <mat-error *ngIf="price?.hasError('required')">
+              Price is required
+            </mat-error>
+            <mat-error *ngIf="price?.hasError('min')">
+              Price must be positive
+            </mat-error>
+          </mat-form-field>
 
-  <mat-form-field color="accent" class="book-price">
-    <mat-label>Book Price</mat-label>
-    <input matInput formControlName="price" type="number" />
-  </mat-form-field>
+          <mat-form-field
+            color="accent"
+            appearance="outline"
+            class="category-select"
+          >
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+              <mat-option value="-1" disabled> Select a category </mat-option>
+              <mat-option
+                *ngFor="let option of categoryOptions; trackBy: trackByCategory"
+                [value]="option.value"
+              >
+                {{ option.displayValue | titlecase }}
+              </mat-option>
+            </mat-select>
+            <mat-icon matSuffix>category</mat-icon>
+            <mat-error *ngIf="categorySelect?.hasError('required')">
+              Category is required
+            </mat-error>
+            <mat-error *ngIf="categorySelect?.hasError('min')">
+              Please select a valid category
+            </mat-error>
+          </mat-form-field>
+        </div>
 
-  <mat-form-field color="accent" class="category-select">
-    <mat-label>Category</mat-label>
-    <mat-select formCategory="category" #categorySelect>
-      @for (option of categoryOptions; track categoryOptions ){
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="newBook.invalid || loading"
+          class="action-button"
+        >
+          <mat-spinner
+            diameter="20"
+            *ngIf="loading"
+            class="button-spinner"
+          ></mat-spinner>
+          <mat-icon *ngIf="!loading">add</mat-icon>
+          {{ loading ? "Adding Book..." : "Add Book" }}
+        </button>
+      </form>
+    </mat-card-content>
+  </mat-card>
 
-      <mat-option [value]="option.value">
-        {{ option.displayValue | titlecase }}
-      </mat-option>
-      }
-    </mat-select>
-  </mat-form-field>
-
-  <button
-    mat-stroked-button
-    color="accent"
-    [disabled]="newBook.invalid || categorySelect.empty"
-    (click)="addNewBook()"
-  >
-    <span>Add</span>
-  </button>
-</mat-card>
-
-<mat-card>
-  <mat-card-header>
-    <h1>Delete Existing Book</h1>
-  </mat-card-header>
-  <mat-card-content>
-    <mat-form-field color="accent" >
-        <mat-label>Book ID</mat-label>
-        <input matInput [formControl]="deleteBook" />
+  <!-- Delete Book Card -->
+  <mat-card class="maintenance-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>delete</mat-icon>
+        Delete Existing Book
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="form-row">
+        <mat-form-field
+          color="accent"
+          appearance="outline"
+          class="delete-field"
+        >
+          <mat-label>Book ID</mat-label>
+          <input
+            matInput
+            [formControl]="deleteBook"
+            placeholder="Enter book ID to delete"
+          />
+          <mat-icon matSuffix>numbers</mat-icon>
+          <mat-error *ngIf="deleteBook.hasError('required')">
+            Book ID is required
+          </mat-error>
+          <mat-error *ngIf="deleteBook.hasError('pattern')">
+            Please enter a valid numeric ID
+          </mat-error>
         </mat-form-field>
-        <button mat-stroked-button color="accent" [disabled]="deleteBook.invalid" (click)="deleteExistingBook()">Delete</button>
-  </mat-card-content>
-</mat-card>
+      </div>
+
+      <button
+        mat-raised-button
+        color="warn"
+        [disabled]="deleteBook.invalid"
+        (click)="deleteExistingBook()"
+        class="action-button delete-button"
+      >
+        <mat-icon>delete_forever</mat-icon>
+        Delete Book
+      </button>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,43 +1,139 @@
-<section class="pending">
-  <mat-card>
-    <mat-card-content>
-      <h2>Pending Returns ({{ pendingReturns.length }})</h2>
-    </mat-card-content>
-  </mat-card>
-  @if (pendingReturns.length> 0){
-  <page-table
-    [columns]="columnsForPendingReturns"
-    [dataSource]="pendingReturns"
-  >
-  </page-table>
+<div class="user-orders-container">
+ 
+  <div *ngIf="isLoading" class="loading-section">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading your orders...</p>
+  </div>
 
-  } @else{
-  <mat-card>
-    <mat-card-content>
-      <h2>No Orders Done Yet!</h2>
-    </mat-card-content>
-  </mat-card>
-  }
-</section>
-<section class="returned">
-  <mat-card>
-    <mat-card-content>
-      <h2>Returned Orders ({{ completedReturns.length }})</h2>
-    </mat-card-content>
-  </mat-card>
+ 
+  <div *ngIf="!isLoading">
+   
+    <section class="pending-section">
+      <mat-card class="section-header">
+        <mat-card-content class="header-content">
+          <div class="title-section">
+            <h2>
+              <mat-icon>pending_actions</mat-icon>
+              Pending Returns ({{ pendingReturns.length }})
+            </h2>
+            <p class="subtitle" *ngIf="pendingReturns.length > 0">
+              Books you currently have borrowed
+              <span *ngIf="getTotalPendingFines() > 0" class="total-fines">
+                • Total pending fines: Kshs {{ getTotalPendingFines() }}
+              </span>
+            </p>
+          </div>
 
-  @if (completedReturns.length > 0) {
-  <page-table
-    [columns]="columnsForReturnedBooks"
-    [dataSource]="completedReturns"
-  >
-  </page-table>
+          <button
+            mat-stroked-button
+            color="accent"
+            (click)="refreshOrders()"
+            class="refresh-button"
+            matTooltip="Refresh orders"
+          >
+            <mat-icon>refresh</mat-icon>
+            Refresh
+          </button>
+        </mat-card-content>
+      </mat-card>
 
-  }@else {
-  <mat-card>
-    <mat-card-content>
-      <h2>No Orders Done Yet!</h2>
-    </mat-card-content>
-  </mat-card>
-  }
-</section>
+      
+      <div *ngIf="pendingReturns.length > 0" class="table-section">
+        <page-table
+          [columns]="columnsForPendingReturns"
+          [dataSource]="pendingReturns"
+          tableType="orders"
+        ></page-table>
+
+        
+        <div class="orders-info" *ngIf="pendingReturns.length > 0">
+          <mat-card class="info-card">
+            <mat-card-content>
+              <div class="info-items">
+                <div class="info-item" *ngFor="let order of pendingReturns">
+                  <mat-icon>book</mat-icon>
+                  <div class="book-info">
+                    <strong>{{ order.bookTitle }}</strong>
+                    <span class="due-info" [class.overdue]="isOverdue(order)">
+                      {{
+                        isOverdue(order)
+                          ? "Overdue"
+                          : "Due in " + getDaysRemaining(order) + " days"
+                      }}
+                    </span>
+                  </div>
+                  <span class="fine-amount" *ngIf="getFineToPay(order) > 0">
+                    Fine: Kshs {{ getFineToPay(order) }}
+                  </span>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+
+     
+      <div *ngIf="pendingReturns.length === 0" class="empty-state">
+        <mat-icon>check_circle</mat-icon>
+        <h3>No Pending Returns</h3>
+        <p>You don't have any books currently borrowed.</p>
+        <button
+          mat-raised-button
+          color="primary"
+          routerLink="/books"
+          class="browse-button"
+        >
+          <mat-icon>menu_book</mat-icon>
+          Browse Books
+        </button>
+      </div>
+    </section>
+
+    
+    <section class="completed-section">
+      <mat-card class="section-header">
+        <mat-card-content>
+          <h2>
+            <mat-icon>assignment_turned_in</mat-icon>
+            Return History ({{ completedReturns.length }})
+          </h2>
+          <p class="subtitle" *ngIf="completedReturns.length > 0">
+            Books you have successfully returned
+          </p>
+        </mat-card-content>
+      </mat-card>
+
+      
+      <div *ngIf="completedReturns.length > 0" class="table-section">
+        <page-table
+          [columns]="columnsForReturnedBooks"
+          [dataSource]="completedReturns"
+          tableType="orders"
+        ></page-table>
+      </div>
+
+      
+      <div *ngIf="completedReturns.length === 0" class="empty-state">
+        <mat-icon>history</mat-icon>
+        <h3>No Return History</h3>
+        <p>You haven't returned any books yet.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="!isLoading && !userId" class="error-state">
+    <mat-icon class="error-icon">error_outline</mat-icon>
+    <h2>Unable to Load Orders</h2>
+    <p>Please log in to view your order history.</p>
+    <button
+      mat-raised-button
+      color="primary"
+      routerLink="/login"
+      class="login-button"
+    >
+      <mat-icon>login</mat-icon>
+      Go to Login
+    </button>
+  </div>
+</div>

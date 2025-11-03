@@ -1,11 +1,182 @@
-<mat-card>
-  <mat-card-content>
-    <h1>All Users of Library</h1>
-  </mat-card-content>
-</mat-card>
+<div class="view-users-container">
 
-<page-table
-  [columns]="columns"
-  [dataSource]="users"
-  (unblock)="unblockUser($event)"
-></page-table>
+  <div *ngIf="isLoading" class="loading-section">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading users...</p>
+  </div>
+
+
+  <div *ngIf="!isLoading">
+
+    <mat-card class="header-card">
+      <mat-card-content class="header-content">
+        <div class="title-section">
+          <h1>
+            <mat-icon>people</mat-icon>
+            Library Users
+          </h1>
+          <p class="subtitle">
+            Manage all library users and their account status
+          </p>
+        </div>
+
+        <div class="stats-section" *ngIf="users.length > 0">
+          <div class="stat-item">
+            <mat-icon class="stat-icon total">group</mat-icon>
+            <div class="stat-info">
+              <span class="stat-number">{{ getUserStats().total }}</span>
+              <span class="stat-label">Total Users</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <mat-icon class="stat-icon admin">admin_panel_settings</mat-icon>
+            <div class="stat-info">
+              <span class="stat-number">{{ getUserStats().admins }}</span>
+              <span class="stat-label">Admins</span>
+            </div>
+          </div>
+          <div class="stat-item">
+            <mat-icon class="stat-icon student">school</mat-icon>
+            <div class="stat-info">
+              <span class="stat-number">{{ getUserStats().students }}</span>
+              <span class="stat-label">Students</span>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Filters Card -->
+    <mat-card class="filters-card" *ngIf="users.length > 0">
+      <mat-card-content class="filters-content">
+        <div class="filter-section">
+          <mat-form-field appearance="outline" color="accent" class="search-field">
+            <mat-label>Search Users</mat-label>
+            <input 
+              matInput 
+              [(ngModel)]="searchTerm"
+              (input)="searchUsers(searchTerm)"
+              placeholder="Search by name, email, or mobile..."
+            />
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" color="accent" class="filter-field">
+            <mat-label>User Type</mat-label>
+            <mat-select 
+              [(value)]="selectedUserType" 
+              (selectionChange)="onUserTypeChange($event.value)"
+            >
+              <mat-option 
+                *ngFor="let option of userTypeOptions" 
+                [value]="option.value"
+              >
+                {{ option.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" color="accent" class="filter-field">
+            <mat-label>Account Status</mat-label>
+            <mat-select 
+              [(value)]="selectedStatus" 
+              (selectionChange)="onStatusChange($event.value)"
+            >
+              <mat-option 
+                *ngFor="let option of statusOptions" 
+                [value]="option.value"
+              >
+                {{ option.label }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="actions-section">
+          <button 
+            mat-stroked-button 
+            color="accent" 
+            (click)="clearFilters()"
+            class="action-button"
+            [disabled]="!searchTerm && selectedUserType === 'ALL' && selectedStatus === 'ALL'"
+          >
+            <mat-icon>clear_all</mat-icon>
+            Clear Filters
+          </button>
+
+          <button 
+            mat-stroked-button 
+            color="accent" 
+            (click)="refreshUsers()"
+            class="action-button"
+          >
+            <mat-icon>refresh</mat-icon>
+            Refresh
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Status Summary -->
+    <div class="status-summary" *ngIf="users.length > 0">
+      <mat-card class="status-card approved">
+        <mat-card-content>
+          <div class="status-content">
+            <mat-icon>check_circle</mat-icon>
+            <div class="status-info">
+              <span class="status-count">{{ getUserStats().approved }}</span>
+              <span class="status-label">Approved</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="status-card blocked">
+        <mat-card-content>
+          <div class="status-content">
+            <mat-icon>block</mat-icon>
+            <div class="status-info">
+              <span class="status-count">{{ getUserStats().blocked }}</span>
+              <span class="status-label">Blocked</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="status-card pending">
+        <mat-card-content>
+          <div class="status-content">
+            <mat-icon>pending</mat-icon>
+            <div class="status-info">
+              <span class="status-count">{{ getUserStats().pending }}</span>
+              <span class="status-label">Pending</span>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+
+    <div *ngIf="users.length > 0 && filteredUsers.length === 0" class="empty-state">
+      <mat-icon>search_off</mat-icon>
+      <h3>No Users Found</h3>
+      <p>No users match your current filters. Try adjusting your search criteria.</p>
+      <button 
+        mat-raised-button 
+        color="accent" 
+        (click)="clearFilters()"
+        class="clear-button"
+      >
+        <mat-icon>clear_all</mat-icon>
+        Clear Filters
+      </button>
+    </div>
+
+    <!-- No Users -->
+    <div *ngIf="users.length === 0" class="empty-state">
+      <mat-icon>people_outline</mat-icon>
+      <h3>No Users Found</h3>
+      <p>There are no users registered in the system yet.</p>
+    </div>
+  </div>
+</div>

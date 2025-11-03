@@ -1,34 +1,124 @@
-<mat-card>
-  <mat-card-content>
-    <h1>Orders With Pending Returns (1)</h1>
+<div class="all-orders-container">
+  <div *ngIf="isLoading" class="loading-section">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading orders...</p>
+  </div>
 
-    <button mat-raised-button color="accent" (click)="sendEmail()">
-      Send Email About Pending Returns
-    </button>
+  <div *ngIf="!isLoading">
+    <mat-card class="section-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>pending_actions</mat-icon>
+          Orders With Pending Returns ({{ getPendingReturnsCount() }})
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{ getPendingReturnsCount() }} order(s) awaiting return
+          <span *ngIf="getTotalPendingFines() > 0" class="total-fines">
+            • Total pending fines: Kshs {{ getTotalPendingFines() }}
+          </span>
+        </mat-card-subtitle>
+      </mat-card-header>
 
-    <button mat-raised-button color="accent" (click)="blockUsers()">
-      Blocked Overdue User
-    </button>
-  </mat-card-content>
-  <mat-card-footer>
-    @if (showProgressBar){
-    <mat-progress-bar mode="indeterminate" color="accent"></mat-progress-bar>
-    }
-  </mat-card-footer>
-</mat-card>
+      <mat-card-content class="actions-section">
+        <div class="action-buttons">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="sendEmail()"
+            [disabled]="getPendingReturnsCount() === 0 || showProgressBar"
+            class="action-button"
+          >
+            <mat-icon>email</mat-icon>
+            Send Return Reminders
+          </button>
 
-<page-table
-  [columns]="columnsForPendingReturns"
-  [dataSource]="ordersWithPendingReturns"
-></page-table>  
+          <button
+            mat-raised-button
+            color="warn"
+            (click)="blockUsers()"
+            [disabled]="getPendingReturnsCount() === 0 || showProgressBar"
+            class="action-button"
+          >
+            <mat-icon>block</mat-icon>
+            Block Overdue Users
+          </button>
 
-<mat-card>
-  <mat-card-content>
-    <h1>Order With Completed Returns (2)</h1>
-  </mat-card-content>
-</mat-card>
+          <button
+            mat-stroked-button
+            color="accent"
+            (click)="refreshOrders()"
+            [disabled]="showProgressBar"
+            class="action-button"
+          >
+            <mat-icon>refresh</mat-icon>
+            Refresh
+          </button>
+        </div>
 
-<page-table
-  [columns]="columnsForCompletedReturns"
-  [dataSource]="orderWithCompletedReturns"
-></page-table>
+        <div class="stats-info" *ngIf="getPendingReturnsCount() > 0">
+          <mat-icon>info</mat-icon>
+          <span>
+            {{ getPendingReturnsCount() }} order(s) pending return • Click
+            buttons above to manage overdue returns
+          </span>
+        </div>
+      </mat-card-content>
+
+      <mat-card-footer>
+        <mat-progress-bar
+          *ngIf="showProgressBar"
+          mode="indeterminate"
+          color="accent"
+        ></mat-progress-bar>
+      </mat-card-footer>
+    </mat-card>
+
+    <div *ngIf="getPendingReturnsCount() > 0" class="table-section">
+      <page-table
+        [columns]="columnsForPendingReturns"
+        [dataSource]="ordersWithPendingReturns"
+        tableType="orders"
+      ></page-table>
+    </div>
+
+    <div *ngIf="getPendingReturnsCount() === 0" class="empty-state">
+      <mat-icon>check_circle</mat-icon>
+      <h3>No Pending Returns</h3>
+      <p>All books have been returned on time!</p>
+    </div>
+  </div>
+
+  <div
+    *ngIf="!isLoading && getCompletedReturnsCount() > 0"
+    class="completed-section"
+  >
+    <mat-card class="section-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>assignment_turned_in</mat-icon>
+          Orders With Completed Returns ({{ getCompletedReturnsCount() }})
+        </mat-card-title>
+        <mat-card-subtitle>
+          {{ getCompletedReturnsCount() }} order(s) successfully returned
+        </mat-card-subtitle>
+      </mat-card-header>
+    </mat-card>
+
+    <div class="table-section">
+      <page-table
+        [columns]="columnsForCompletedReturns"
+        [dataSource]="orderWithCompletedReturns"
+        tableType="orders"
+      ></page-table>
+    </div>
+  </div>
+
+  <div
+    *ngIf="!isLoading && getCompletedReturnsCount() === 0"
+    class="empty-state"
+  >
+    <mat-icon>history</mat-icon>
+    <h3>No Return History</h3>
+    <p>No books have been returned yet.</p>
+  </div>
+</div>

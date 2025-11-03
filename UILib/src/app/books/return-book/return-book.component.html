@@ -1,26 +1,130 @@
-<mat-card>
-  <mat-card-header>
-    <h1>Return Books</h1>
-  </mat-card-header>
-
-  <mat-card-content [formGroup]="returnForm">
-    <mat-form-field appearance="outline" color="accent">
-      <mat-label>User ID</mat-label>
-      <input matInput formControlName="userId" />
-    </mat-form-field>
-    <mat-form-field appearance="outline" color="accent">
-      <mat-label>Book ID</mat-label>
-      <input matInput formControlName="bookId" />
-    </mat-form-field>
-
-    <div class="fine">
-      <button mat-stroked-button color="accent" (click)="getFine()">
-        Get Fine
-      </button>
-      <span [ngStyle]="{ display: fineToPay === null ? 'none' : 'flex' }">
-        kshs{{ fineToPay }}</span
+<div class="return-book-container">
+  <mat-card class="return-card">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>assignment_return</mat-icon>
+        Return Books
+      </mat-card-title>
+      <mat-card-subtitle
+        >Process book returns and calculate fines</mat-card-subtitle
       >
-    </div>
-    <button mat-stroked-button color="accent" (click)="returnBook()">Return Book</button>
-  </mat-card-content>
-</mat-card>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="returnForm">
+        <div class="form-fields">
+          <mat-form-field
+            appearance="outline"
+            color="accent"
+            class="user-field"
+          >
+            <mat-label>User ID</mat-label>
+            <input
+              matInput
+              formControlName="userId"
+              type="number"
+              placeholder="Enter user ID"
+              min="1"
+            />
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="userId?.hasError('required')">
+              User ID is required
+            </mat-error>
+            <mat-error *ngIf="userId?.hasError('min')">
+              Please enter a valid User ID
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field
+            appearance="outline"
+            color="accent"
+            class="book-field"
+          >
+            <mat-label>Book ID</mat-label>
+            <input
+              matInput
+              formControlName="bookId"
+              type="number"
+              placeholder="Enter book ID"
+              min="1"
+            />
+            <mat-icon matSuffix>book</mat-icon>
+            <mat-error *ngIf="bookId?.hasError('required')">
+              Book ID is required
+            </mat-error>
+            <mat-error *ngIf="bookId?.hasError('min')">
+              Please enter a valid Book ID
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="fine-section">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="getFine()"
+            [disabled]="returnForm.invalid || isLoading"
+            class="fine-button"
+          >
+            <mat-spinner
+              diameter="20"
+              *ngIf="isLoading"
+              class="button-spinner"
+            ></mat-spinner>
+            <mat-icon *ngIf="!isLoading">calculate</mat-icon>
+            {{ isLoading ? "Calculating..." : "Calculate Fine" }}
+          </button>
+
+          <div
+            class="fine-display"
+            [class.show]="isFineCalculated"
+            [class.has-fine]="fineToPay && fineToPay > 0"
+            [class.no-fine]="fineToPay === 0"
+          >
+            <div class="fine-amount">
+              <mat-icon *ngIf="fineToPay === 0">check_circle</mat-icon>
+              <mat-icon *ngIf="fineToPay && fineToPay > 0">warning</mat-icon>
+              <span class="fine-text">Kshs {{ fineAmount }}</span>
+            </div>
+            <div class="fine-status" *ngIf="fineToPay !== null">
+              {{ fineToPay === 0 ? "No fine applicable" : "Fine to be paid" }}
+            </div>
+          </div>
+        </div>
+
+        <button
+          mat-raised-button
+          color="accent"
+          (click)="returnBook()"
+          [disabled]="returnForm.invalid || !isFineCalculated || isLoading"
+          class="return-button"
+        >
+          <mat-icon>assignment_returned</mat-icon>
+          Process Return
+        </button>
+
+        <div *ngIf="currentOrder" class="order-details">
+          <mat-card class="details-card">
+            <mat-card-header>
+              <mat-card-title>Order Details</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="detail-item">
+                <strong>Book:</strong> {{ currentOrder.bookTitle }}
+              </div>
+              <div class="detail-item">
+                <strong>User:</strong> {{ currentOrder.userName }}
+              </div>
+              <div class="detail-item">
+                <strong>Order Date:</strong> {{ currentOrder.orderDate | date }}
+              </div>
+              <div class="detail-item" *ngIf="currentOrder.approved_at">
+                <strong>Approved:</strong> {{ currentOrder.approved_at | date }}
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

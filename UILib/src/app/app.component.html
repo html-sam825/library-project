@@ -1,15 +1,23 @@
-<mat-sidenav-container>
-  <mat-sidenav opened mode="side">
-    <page-side-nav></page-side-nav>
-  </mat-sidenav>
+    <mat-sidenav-container class="sidenav-container">
+      <mat-sidenav
+        #sidenav
+        mode="side"
+        [opened]="isSidenavOpen"
+        class="app-sidenav"
+      >
+        <page-side-nav></page-side-nav>
+      </mat-sidenav>
 
-  <mat-sidenav-content>
-    <page-header></page-header>
+      <mat-sidenav-content class="sidenav-content">
+        <page-header
+          [showMenuButton]="true"
+          (toggleSidenav)="sidenav.toggle()"
+        ></page-header>
 
-    <main>
-      <router-outlet></router-outlet>
-    </main>
+        <main class="main-content">
+          <router-outlet></router-outlet>
+        </main>
 
-    <page-footer></page-footer>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+        <page-footer></page-footer>
+      </mat-sidenav-content>
+    </mat-sidenav-container>

@@ -1,57 +1,78 @@
+
 export interface User {
   id: number;
-  firstName: any;
-  lastName: any;
-  email: any;
-  mobileNumber: any;
-  password: any;
+  firstName: string;
+  lastName: string;
+  email: string;
+  mobileNumber: string;
+  password: string;
   userType: UserType;
   accountStatus: AccountStatus;
-  createdOn: any;
+  createdOn: string;
+  max_books_limit?: number; 
+  can_borrow?: boolean;
 }
 
+
 export enum UserType {
-  ADMIN,
-  STUDENT,
+  ADMIN = 'ADMIN',
+  STUDENT = 'STUDENT',
 }
 
 export enum AccountStatus {
-  ACTIVE,
-  BLOCKED,
-  UNAPPROVED,
+  APPROVED = 'APPROVED', 
+  BLOCKED = 'BLOCKED',
+  UNAPPROVED = 'UNAPPROVED',
 }
 
 export interface BookCategory {
   id: number;
-  category: any;
-  subCategory: any;
+  category: string;
+  subCategory: string;
 }
+
 
 export interface Book {
   id: number;
-  title: any;
-  author: any;
-  price: any;
-  ordered: boolean;
+  title: string;
+  author: string;
+  price: number;
   bookCategory: BookCategory;
-  bookCategoryId: any;
+  bookCategoryId: number;
+  ordered: boolean;
+  orderStatus?: 'PENDING' | 'APPROVED' | 'RETURNED' | 'OVERDUE'| 'UNAVAILABLE' | 'REJECTED'; 
+  orderedBy?: number; 
+  orderDate?: string;
+  returnDate?: string;
+  approvedBy?: number; 
+  approvedDate?: string;
 }
 
 export interface BooksByCategory {
-  bookCategoryId: any;
-  category: any;
-  subCategory: any;
+  bookCategoryId: number;
+  category: string;
+  subCategory: string;
   books: Book[];
 }
 
-export interface Order{
-  id : number;
+
+export interface Order {
+  id: number;
   userId: number;
-  userName: any;
+  userName: string;
   bookId: number;
-  bookTitle: any; 
-  orderDate: any;
+  bookTitle: string;
+  orderDate: string;
   returned: boolean;
-  returnDate: any;
-  finePaid: number
+  returnDate: string;
+  finePaid: number;
+  status?: string;
+  approved_at?: string; 
+  fine_amount?: number; 
+
+  approved?: boolean;
+  approvedBy?: number;
+  approvedDate?: string;
+  orderStatus?: 'PENDING' | 'APPROVED' | 'REJECTED' | 'RETURNED';
+
 }

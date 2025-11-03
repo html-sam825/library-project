@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('password');
             $table->enum('userType', ['ADMIN', 'STUDENT'])->default('STUDENT');
             $table->enum('accountStatus', ['ACTIVE', 'BLOCKED', 'UNAPPROVED'])->default('UNAPPROVED');
+            $table->integer('max_books_limit')->default(3);
+            $table->boolean('can_borrow')->default(false);
             $table->timestamp('createdOn')->useCurrent();
             $table->rememberToken();
             $table->timestamps();

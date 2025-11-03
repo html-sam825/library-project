@@ -1,50 +1,269 @@
 :host {
   display: block;
-  padding: 1rem 0;
+  padding: 1rem 2rem;
 }
 
-mat-form-field {
-  width: 500px;
+.book-store-container {
+  max-width: 1200px;
   margin: 0 auto;
-  display: block;
+}
+::ng-deep .info-snackbar {
+  background: #2196f3;
+  color: white;
 }
 
+.search-section {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1.5rem;
 
-mat-card{
-  width: max-content;
-  margin-bottom: 1rem;
-  mat-card-content{
-    font-size: 1.5rem;
-
+  .search-field {
+    width: 100%;
+    max-width: 500px;
   }
 }
 
-mat-accrodion{
-  mat-panel-title{
-    font-size:1.4rem;
-    letter-spacing: 2px;
-    font-weight:500;
-    color: #3489eb;
-  }
+.results-card {
+  margin-bottom: 1.5rem;
+  
+  .results-info {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 500;
 
-  mat-panel-description{
-    font-style: italic;
-    font-size:1.2rem;
-    letter-spacing:1px;
+    mat-icon {
+      color: #3489eb;
+    }
 
-  }
-  table {
-    width:100%;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-
-    .mat-mdc-header-cell {
+    .search-term {
       font-style: italic;
-      font-size: 1.2rem;
+      color: #666;
+    }
+  }
+}
+
+.loading-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem;
+  text-align: center;
+  color: #666;
+}
+
+.no-results {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 3rem;
+  text-align: center;
+  color: #666;
+
+  mat-icon {
+    font-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    color: #ccc;
+  }
+
+  h3 {
+    margin: 0;
+    color: #444;
+  }
+}
+
+.category-panel {
+  margin-bottom: 1rem;
+  border-radius: 8px !important;
+  overflow: hidden;
+
+  mat-expansion-panel-header {
+    background-color: rgba(52, 137, 235, 0.05);
+    
+    .category-icon {
+      margin-right: 0.5rem;
+      color: #3489eb;
     }
 
+    .subcategory-icon {
+      margin-right: 0.5rem;
+      color: #666;
+    }
+
+    .book-count {
+      margin-left: auto;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    mat-panel-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: #3489eb;
+    }
+
+    mat-panel-description {
+      font-style: italic;
+      font-size: 1rem;
+      letter-spacing: 0.5px;
+      color: #666;
+    }
+  }
+}
+
+.books-table {
+  width: 100%;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  overflow: hidden;
+
+  .mat-mdc-header-cell {
+    background-color: #f5f5f5;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #333;
+  }
+
+  .mat-mdc-cell {
+    font-size: 1rem;
+    padding: 12px 16px;
+  }
+
+  .title-cell {
+    font-weight: 500;
+  }
+
+  .price-cell {
+    font-weight: 600;
+    color: #2e7d32;
+  }
+
+  .status-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
+
+    &.available {
+      background-color: rgba(76, 175, 80, 0.1);
+      color: #2e7d32;
+    }
+
+    &.unavailable {
+      background-color: rgba(244, 67, 54, 0.1);
+      color: #c62828;
+    }
+
+    mat-icon {
+      font-size: 1.1rem;
+      width: 1.1rem;
+      height: 1.1rem;
+    }
+  }
+
+  .order-button {
+    min-width: 100px;
+    
+    &:disabled {
+      background-color: #ccc;
+      color: #666;
+    }
+
+    mat-icon {
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+
+@media (max-width: 768px) {
+  :host {
+    padding: 1rem;
+  }
+
+  .books-table {
+    .mat-mdc-header-cell,
     .mat-mdc-cell {
-      font-size:1.2rem;
+      padding: 8px 12px;
+      font-size: 0.9rem;
     }
 
+    .order-button {
+      min-width: auto;
+      
+      span {
+        display: none;
+      }
+
+      mat-icon {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+
+::ng-deep .success-snackbar {
+  background: #4caf50;
+  color: white;
+}
+
+::ng-deep .error-snackbar {
+  background: #f44336;
+  color: white;
+}
+
+
+.status-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+
+  &.available {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #2e7d32;
+  }
+
+  &.unavailable {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: #c62828;
+  }
+
+  &.pending {
+    background-color: rgba(255, 193, 7, 0.1);
+    color: #ff8f00;
+  }
+
+  &.approved {
+    background-color: rgba(33, 150, 243, 0.1);
+    color: #1565c0;
+  }
+
+  &.returned {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #2e7d32;
+  }
+
+  &.overdue {
+    background-color: rgba(244, 67, 54, 0.1);
+    color: #c62828;
+  }
+
+  mat-icon {
+    font-size: 1.1rem;
+    width: 1.1rem;
+    height: 1.1rem;
   }
 }

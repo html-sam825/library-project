@@ -2,9 +2,9 @@
   "name": "uilib",
   "version": "0.0.0",
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
-    "build": "ng build",
+    "ng": "node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng",
+    "start": "node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng serve",
+    "build": "node --max_old_space_size=4096 ./node_modules/@angular/cli/bin/ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -40,4 +40,9 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.7.2"
   }
+  
+
+
+  
 }
+

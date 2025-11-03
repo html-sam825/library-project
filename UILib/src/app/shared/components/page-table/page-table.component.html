@@ -1,0 +1,294 @@
+<table mat-table [dataSource]="dataSource" class="page-table">
+  <!-- User ID Column -->
+  <ng-container *ngIf="columns.includes('userId')" matColumnDef="userId">
+    <th mat-header-cell *matHeaderCellDef>User ID</th>
+    <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+  </ng-container>
+
+  <!-- User Name Column -->
+  <ng-container *ngIf="columns.includes('userName')" matColumnDef="userName">
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.firstName }} {{ element.lastName }}
+    </td>
+  </ng-container>
+
+  <!-- Email Column -->
+  <ng-container *ngIf="columns.includes('email')" matColumnDef="email">
+    <th mat-header-cell *matHeaderCellDef>Email</th>
+    <td mat-cell *matCellDef="let element">
+      {{ safeDisplay(element.email) }}
+    </td>
+  </ng-container>
+
+  <!-- User Type Column -->
+  <ng-container *ngIf="columns.includes('userType')" matColumnDef="userType">
+    <th mat-header-cell *matHeaderCellDef>Type</th>
+    <td mat-cell *matCellDef="let element">{{ getUserType(element) }}</td>
+  </ng-container>
+
+  <!-- Created On Column -->
+  <ng-container *ngIf="columns.includes('createdOn')" matColumnDef="createdOn">
+    <th mat-header-cell *matHeaderCellDef>Created On</th>
+    <td mat-cell *matCellDef="let element">
+      {{ formatDate(element.createdOn) }}
+    </td>
+  </ng-container>
+
+  <!-- Order ID Column -->
+  <ng-container *ngIf="columns.includes('id')" matColumnDef="id">
+    <th mat-header-cell *matHeaderCellDef>Order ID</th>
+    <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+  </ng-container>
+
+  <!-- User ID for Order Column -->
+  <ng-container
+    *ngIf="columns.includes('userIdForOrder')"
+    matColumnDef="userIdForOrder"
+  >
+    <th mat-header-cell *matHeaderCellDef>User ID</th>
+    <td mat-cell *matCellDef="let element">{{ element.userId }}</td>
+  </ng-container>
+
+  <!-- User Name for Order Column -->
+  <ng-container
+    *ngIf="columns.includes('userNameForOrder')"
+    matColumnDef="userNameForOrder"
+  >
+    <th mat-header-cell *matHeaderCellDef>User Name</th>
+    <td mat-cell *matCellDef="let element">{{ element.userName }}</td>
+  </ng-container>
+
+  <!-- Book ID Column -->
+  <ng-container *ngIf="columns.includes('bookId')" matColumnDef="bookId">
+    <th mat-header-cell *matHeaderCellDef>Book ID</th>
+    <td mat-cell *matCellDef="let element">{{ element.bookId }}</td>
+  </ng-container>
+
+  <!-- Book Title Column -->
+  <ng-container *ngIf="columns.includes('bookTitle')" matColumnDef="bookTitle">
+    <th mat-header-cell *matHeaderCellDef>Book Title</th>
+    <td mat-cell *matCellDef="let element">{{ element.bookTitle }}</td>
+  </ng-container>
+
+  <!-- Order Date Column -->
+  <ng-container *ngIf="columns.includes('orderDate')" matColumnDef="orderDate">
+    <th mat-header-cell *matHeaderCellDef>Order Date</th>
+    <td mat-cell *matCellDef="let element">
+      {{ formatDate(element.orderDate) }}
+    </td>
+  </ng-container>
+
+  <ng-container
+    *ngIf="columns.includes('approvedDate')"
+    matColumnDef="approvedDate"
+  >
+    <th mat-header-cell *matHeaderCellDef>Approved Date</th>
+    <td mat-cell *matCellDef="let element">
+      {{ formatDate(element.approved_at) }}
+    </td>
+  </ng-container>
+
+  <!-- Approve Column -->
+  <ng-container *ngIf="columns.includes('approve')" matColumnDef="approve">
+    <th mat-header-cell *matHeaderCellDef>Approve</th>
+    <td mat-cell *matCellDef="let element">
+      <button
+        mat-raised-button
+        color="primary"
+        *ngIf="needsApproval(element)"
+        (click)="onApprove(element)"
+        class="action-button"
+      >
+        <mat-icon>check_circle</mat-icon>
+        Approve
+      </button>
+      <span *ngIf="!needsApproval(element)" class="status-text approved">
+        Approved
+      </span>
+    </td>
+  </ng-container>
+
+  <!-- Mobile Number Column -->
+  <ng-container
+    *ngIf="columns.includes('mobileNumber')"
+    matColumnDef="mobileNumber"
+  >
+    <th mat-header-cell *matHeaderCellDef>Mobile Number</th>
+    <td mat-cell *matCellDef="let element">
+      {{ safeDisplay(element.mobileNumber) }}
+    </td>
+  </ng-container>
+
+  <!-- Return Date Column -->
+  <ng-container
+    *ngIf="columns.includes('returnDate')"
+    matColumnDef="returnDate"
+  >
+    <th mat-header-cell *matHeaderCellDef>Return Date</th>
+    <td mat-cell *matCellDef="let element">
+      {{ formatDate(element.returnDate) }}
+    </td>
+  </ng-container>
+
+  <!-- Fine To Pay Column -->
+  <ng-container *ngIf="columns.includes('fineToPay')" matColumnDef="fineToPay">
+    <th mat-header-cell *matHeaderCellDef>Fine To Pay</th>
+    <td mat-cell *matCellDef="let element">
+      <span
+        [class]="(element.fine_amount || 0) > 0 ? 'fine-amount' : 'no-fine'"
+      >
+        Kshs {{ element.fine_amount || 0 }}
+      </span>
+    </td>
+  </ng-container>
+
+  <!-- Fine Paid Column -->
+  <ng-container *ngIf="columns.includes('finePaid')" matColumnDef="finePaid">
+    <th mat-header-cell *matHeaderCellDef>Fine Paid</th>
+    <td mat-cell *matCellDef="let element">
+      <span [class]="element.finePaid > 0 ? 'fine-amount' : 'no-fine'">
+        Kshs {{ element.finePaid || 0 }}
+      </span>
+    </td>
+  </ng-container>
+
+  <ng-container
+    *ngIf="columns.includes('approveOrder')"
+    matColumnDef="approveOrder"
+  >
+    <th mat-header-cell *matHeaderCellDef>Approve Order</th>
+    <td mat-cell *matCellDef="let element">
+      <button
+        mat-raised-button
+        color="primary"
+        *ngIf="canApproveOrder(element)"
+        (click)="onApproveOrder(element)"
+        class="action-button"
+      >
+        <mat-icon>check_circle</mat-icon>
+        Approve
+      </button>
+      <span
+        *ngIf="!canApproveOrder(element) && element.approved"
+        class="status-text approved"
+      >
+        Approved
+      </span>
+      <span
+        *ngIf="!canApproveOrder(element) && element.returned"
+        class="status-text"
+      >
+        Returned
+      </span>
+    </td>
+  </ng-container>
+
+  <!-- Reject Order Column -->
+  <ng-container
+    *ngIf="columns.includes('rejectOrder')"
+    matColumnDef="rejectOrder"
+  >
+    <th mat-header-cell *matHeaderCellDef>Reject Order</th>
+    <td mat-cell *matCellDef="let element">
+      <button
+        mat-raised-button
+        color="warn"
+        *ngIf="canApproveOrder(element)"
+        (click)="onRejectOrder(element)"
+        class="action-button"
+      >
+        <mat-icon>cancel</mat-icon>
+        Reject
+      </button>
+      <span
+        *ngIf="!canApproveOrder(element) && element.approved"
+        class="status-text approved"
+      >
+        Approved
+      </span>
+    </td>
+  </ng-container>
+
+  <!-- Order Status Column -->
+  <ng-container
+    *ngIf="columns.includes('orderStatus')"
+    matColumnDef="orderStatus"
+  >
+    <th mat-header-cell *matHeaderCellDef>Order Status</th>
+    <td mat-cell *matCellDef="let element">
+      <span class="status-badge" [class]="getOrderStatusClass(element)">
+        {{ getOrderStatusText(element) }}
+      </span>
+    </td>
+  </ng-container>
+
+  <!-- Account Status Column -->
+  <ng-container
+    *ngIf="columns.includes('accountStatus')"
+    matColumnDef="accountStatus"
+  >
+    <th mat-header-cell *matHeaderCellDef>Account Status</th>
+    <td mat-cell *matCellDef="let element">
+      <span
+        [class]="
+          'status-badge ' +
+          getAccountStatus(element.accountStatus).toLowerCase()
+        "
+      >
+        {{ getAccountStatus(element.accountStatus) }}
+      </span>
+    </td>
+  </ng-container>
+  <!-- Empty State -->
+  <tr class="mat-row" *ngIf="dataSource.length === 0">
+    <td class="mat-cell" [attr.colspan]="columns.length">
+      <div class="empty-state">
+        <mat-icon>inbox</mat-icon>
+        <p>No data available</p>
+      </div>
+    </td>
+  </tr>
+
+  <!-- Actions Column (Using existing methods) -->
+  <ng-container *ngIf="columns.includes('actions')" matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef>Actions</th>
+    <td mat-cell *matCellDef="let element">
+      <!-- Block Button - Show for approved users -->
+      <button
+        mat-raised-button
+        color="warn"
+        *ngIf="!isUserBlocked(element) && !needsApproval(element)"
+        (click)="onBlock(element)"
+        class="action-button"
+      >
+        <mat-icon>block</mat-icon>
+        Block
+      </button>
+
+      <!-- Unblock Button - Show for blocked users -->
+      <button
+        mat-raised-button
+        color="primary"
+        *ngIf="isUserBlocked(element)"
+        (click)="onUnblock(element)"
+        class="action-button"
+      >
+        <mat-icon>lock_open</mat-icon>
+        Unblock
+      </button>
+
+      <!-- Active Status - Show for approved users -->
+      <span
+        *ngIf="!isUserBlocked(element) && !needsApproval(element)"
+        class="status-text active"
+      >
+        Active
+      </span>
+    </td>
+  </ng-container>
+
+  <!-- Table Rows -->
+  <tr mat-header-row *matHeaderRowDef="columns"></tr>
+  <tr mat-row *matRowDef="let row; columns: columns"></tr>
+</table>

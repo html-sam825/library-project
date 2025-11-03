@@ -26,5 +26,5 @@ class BookController extends Controller
         $book = $this->book->find($id);
         return $book->delete();
     }
-    //
+    
 }

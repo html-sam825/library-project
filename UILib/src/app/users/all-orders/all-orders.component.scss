@@ -1,14 +1,200 @@
-mat-card{
-  margin-bottom: 1rem ;
+.all-orders-container {
+  padding: 1rem;
+}
 
-  button{
-    margin-right:1rem;
-  }
-  &:nth-of-type(2){
-    margin-top: 2rem;
-  }
+.loading-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  color: #666;
 
-  mat-card-footerP{
+  p {
     margin-top: 1rem;
+    font-size: 1.1rem;
+  }
+}
+
+.section-card {
+  margin-bottom: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  mat-card-header {
+    margin-bottom: 1rem;
+
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      color: #3489eb;
+      margin: 0;
+
+      mat-icon {
+        color: #3489eb;
+      }
+    }
+
+    mat-card-subtitle {
+      font-size: 1rem;
+      color: #666;
+      margin-top: 0.5rem;
+
+      .total-fines {
+        color: #c62828;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.actions-section {
+  .action-buttons {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+
+    .action-button {
+      min-width: 200px;
+      height: 48px;
+      font-weight: 500;
+
+      mat-icon {
+        margin-right: 0.5rem;
+      }
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+      }
+
+      
+      &[color="warn"] {
+        background-color: #f44336;
+        color: white;
+
+        &:hover:not(:disabled) {
+          background-color: #d32f2f;
+        }
+      }
+
+      &[color="primary"] {
+        background-color: #3489eb;
+
+        &:hover:not(:disabled) {
+          background-color: #2970c6;
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+
+      .action-button {
+        min-width: 100%;
+      }
+    }
+  }
+
+  .stats-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background-color: rgba(52, 137, 235, 0.05);
+    border-radius: 8px;
+    border-left: 4px solid #3489eb;
+
+    mat-icon {
+      color: #3489eb;
+      flex-shrink: 0;
+    }
+
+    span {
+      color: #666;
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.table-section {
+  margin-top: 1rem;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  color: #666;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  margin: 2rem 0;
+
+  mat-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 1rem;
+    color: #ccc;
+  }
+
+  h3 {
+    margin: 0 0 0.5rem 0;
+    color: #444;
+    font-size: 1.5rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+}
+
+.completed-section {
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e0e0e0;
+}
+
+
+mat-card-footer {
+  margin-top: 1rem;
+
+  mat-progress-bar {
+    border-radius: 4px;
+  }
+}
+
+
+::ng-deep .success-snackbar {
+  background: #4caf50;
+  color: white;
+}
+
+::ng-deep .error-snackbar {
+  background: #f44336;
+  color: white;
+}
+
+::ng-deep .info-snackbar {
+  background: #2196f3;
+  color: white;
+}
+
+
+@media (max-width: 768px) {
+  .all-orders-container {
+    padding: 0.5rem;
+  }
+
+  .section-card {
+    margin-bottom: 1.5rem;
   }
 }

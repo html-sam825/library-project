@@ -1,19 +1,338 @@
-mat-card{
-    margin: 0.5rem auto;
-    width: 90%;
-        border: 1px solid white
-    h1{
-        letter-spacing:3px;
-        text-align:center;
+:host {
+  display: block;
+  height: 100%;
+  background: linear-gradient(180deg, #8e24aa 0%, #6a1b9a 100%);
+}
+
+
+mat-card {
+  margin: 1rem auto;
+  width: 90%;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  color: white;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  }
+
+  h1 {
+    letter-spacing: 2px;
+    text-align: center;
+    margin: 0;
+    padding: 1rem 0.5rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    line-height: 1.3;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
+  
+  .user-details {
+    padding: 0.75rem;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+    .user-name {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
     }
+
+    .user-role {
+      font-size: 0.8rem;
+      opacity: 0.8;
+      margin-bottom: 0.5rem;
+    }
+
+    .account-status {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+
+      &.approved {
+        background-color: rgba(76, 175, 80, 0.3);
+        color: #a5d6a7;
+      }
+
+      &.pending {
+        background-color: rgba(255, 193, 7, 0.3);
+        color: #ffe082;
+      }
+
+      &.blocked {
+        background-color: rgba(244, 67, 54, 0.3);
+        color: #ef9a9a;
+      }
+    }
+  }
+}
+
+
+mat-nav-list {
+  padding: 0.5rem 0;
+
+  a {
+    margin: 0.25rem 0.5rem;
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: white;
+      transform: translateX(4px);
+
+      .nav-icon {
+        transform: scale(1.1);
+      }
+
+      .nav-label {
+        font-weight: 500;
+      }
+    }
+
     
+    &.active-link {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 4px;
+        height: 60%;
+        background-color: #ffd54f;
+        border-radius: 0 2px 2px 0;
+      }
+
+      .nav-icon {
+        color: #ffd54f;
+      }
     }
 
-    mat-nav-list{
-        a{
-            &.active-link {
-                background-color: rgba(#fff, 0.2);
+   
+    .nav-item-content {
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1rem;
+      gap: 1rem;
 
-            }
+      .nav-icon {
+        font-size: 1.4rem;
+        width: 1.4rem;
+        height: 1.4rem;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+      }
+
+      .nav-label {
+        flex: 1;
+        font-size: 0.95rem;
+        letter-spacing: 0.3px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-badge {
+        background-color: rgba(255, 213, 79, 0.9);
+        color: #6a1b9a;
+        border-radius: 10px;
+        padding: 0.2rem 0.6rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        min-width: 20px;
+        text-align: center;
+      }
+    }
+
+    
+    .submenu-indicator {
+      font-size: 1.2rem;
+      width: 1.2rem;
+      height: 1.2rem;
+      transition: transform 0.3s ease;
+      opacity: 0.7;
+    }
+
+    
+    &.expanded {
+      .submenu-indicator {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+ 
+  .submenu {
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 0 0 8px 8px;
+    margin-top: -4px;
+    overflow: hidden;
+    animation: slideDown 0.3s ease;
+
+    a {
+      margin: 0;
+      border-radius: 0;
+      padding-left: 3rem;
+      font-size: 0.9rem;
+
+      &:last-child {
+        border-radius: 0 0 8px 8px;
+      }
+
+      &::before {
+        display: none;
+      }
+    }
+  }
+}
+
+
+.nav-section-header {
+  padding: 1rem 1.5rem 0.5rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: rgba(255, 255, 255, 0.6);
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 0 0.5rem;
+}
+
+
+.nav-divider {
+  margin: 1rem 0.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+.nav-footer {
+  padding: 1rem;
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+  .footer-info {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.75rem;
+
+    .app-version {
+      font-weight: 600;
+      color: rgba(255, 255, 255, 0.8);
+    }
+  }
+}
+
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+
+@media (max-width: 768px) {
+  mat-card {
+    margin: 0.5rem auto;
+    width: 95%;
+
+    h1 {
+      font-size: 1rem;
+      padding: 0.75rem 0.5rem;
+    }
+
+    .user-details {
+      padding: 0.5rem;
+
+      .user-name {
+        font-size: 0.9rem;
+      }
+
+      .user-role {
+        font-size: 0.75rem;
+      }
+    }
+  }
+
+  mat-nav-list {
+    a {
+      margin: 0.125rem 0.25rem;
+
+      .nav-item-content {
+        padding: 0.6rem 0.75rem;
+        gap: 0.75rem;
+
+        .nav-icon {
+          font-size: 1.2rem;
+          width: 1.2rem;
+          height: 1.2rem;
         }
+
+        .nav-label {
+          font-size: 0.85rem;
+        }
+      }
     }
+  }
+}
+
+
+:host-context(.sidenav-collapsed) {
+  mat-card {
+    display: none;
+  }
+
+  mat-nav-list {
+    a {
+      margin: 0.125rem;
+
+      .nav-item-content {
+        justify-content: center;
+        padding: 0.75rem;
+
+        .nav-label,
+        .nav-badge,
+        .submenu-indicator {
+          display: none;
+        }
+      }
+
+      &.active-link::before {
+        height: 40%;
+      }
+    }
+  }
+}

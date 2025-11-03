@@ -1,14 +1,57 @@
-<mat-card>
-  <mat-card-content>
-    <h1>{{ panelName }}</h1>
+<mat-card class="sidenav-card">
+  <mat-card-content class="sidenav-content">
+    <div class="sidenav-header">
+      <mat-icon class="header-icon">library_books</mat-icon>
+      <h1 class="panel-title">{{ panelName }}</h1>
+    </div>
+
+    <div class="user-info" *ngIf="dataService.getUserInfo()">
+      <mat-icon class="user-icon">account_circle</mat-icon>
+      <div class="user-details">
+        <span class="user-name">
+          {{ dataService.getUserInfo()?.firstName }}
+          {{ dataService.getUserInfo()?.lastName }}
+        </span>
+        <span class="user-role">
+          {{ dataService.getUserInfo()?.userType }} •
+          {{ dataService.getUserInfo()?.accountStatus }}
+        </span>
+      </div>
+    </div>
+
+    <mat-nav-list class="nav-list">
+      <a
+        href=""
+        mat-list-item
+        *ngFor="let item of navItems; trackBy: trackByLink"
+        [routerLink]="item.link"
+        routerLinkActive="active-link"
+        [class.active-link]="isActive(item.link)"
+        (click)="onNavItemClick(item)"
+      >
+        <mat-icon matListIcon class="nav-icon">
+          {{ getIconForItem(item.value) }}
+        </mat-icon>
+
+        <span class="nav-label">{{ item.value }}</span>
+
+        <span *ngIf="getBadgeCount(item.value)" class="nav-badge">
+          {{ getBadgeCount(item.value) }}
+        </span>
+      </a>
+    </mat-nav-list>
+
+    <div class="logout-section" *ngIf="dataService.getUserInfo()">
+      <button
+        mat-stroked-button
+        color="warn"
+        class="logout-button"
+        (click)="logout()"
+      >
+        <mat-icon>logout</mat-icon>
+        <!-- Fixed: lowercase 'logout' -->
+        <span>Logout</span>
+      </button>
+    </div>
   </mat-card-content>
 </mat-card>
-
-<mat-nav-list>
-  <a mat-list-item href="#"
-     *ngFor="let item of navItems; trackBy: trackByLink"
-     [routerLink]="'/' + item.link"
-     routerLinkActive="active-link">
-    {{ item.value }}
-  </a>
-</mat-nav-list>

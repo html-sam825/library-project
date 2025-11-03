@@ -1,11 +1,74 @@
-<mat-card>
-  <mat-card-content>
-    <h1>Pending Approval Requests ({{ users.length }})</h1>
-  </mat-card-content>
-</mat-card>
+<div class="approval-requests-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-section">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading pending approval requests...</p>
+  </div>
 
-<page-table
-  [columns]="columns"
-  [dataSource]="users"
-  (approve)="approve($event)"
-></page-table>
+  <!-- Main Content -->
+  <div *ngIf="!isLoading">
+   
+    <mat-card class="header-card">
+      <mat-card-content class="header-content">
+        <div class="title-section">
+          <h1>
+            <mat-icon>pending_actions</mat-icon>
+            Pending Approval Requests ({{ users.length }})
+          </h1>
+          <p class="subtitle">
+            Users waiting for account approval to access the library system
+          </p>
+        </div>
+
+        <div class="action-buttons" *ngIf="users.length > 0">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="approveAll()"
+            class="action-button"
+            matTooltip="Approve all pending requests"
+          >
+            <mat-icon>check_circle</mat-icon>
+            Approve All
+          </button>
+
+          <button
+            mat-stroked-button
+            color="accent"
+            (click)="refresh()"
+            class="action-button"
+            matTooltip="Refresh the list"
+          >
+            <mat-icon>refresh</mat-icon>
+            Refresh
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Users Table -->
+    <div *ngIf="users.length > 0" class="table-section">
+      <page-table
+        [columns]="columns"
+        [dataSource]="users"
+        [tableType]="'users'"
+        (approve)="approve($event)"
+      ></page-table>
+    </div>
+
+    <div *ngIf="users.length === 0" class="empty-state">
+      <mat-icon>check_circle_outline</mat-icon>
+      <h2>No Pending Approvals</h2>
+      <p>All user accounts have been approved. Great work!</p>
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="refresh()"
+        class="refresh-button"
+      >
+        <mat-icon>refresh</mat-icon>
+        Check for New Requests
+      </button>
+    </div>
+  </div>
+</div>

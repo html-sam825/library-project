@@ -1,4 +1,175 @@
-mat-card{
+.approval-requests-container {
+  padding: 1rem;
+}
+
+.loading-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem;
+  text-align: center;
+  color: #666;
+
+  p {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+  }
+}
+
+.header-card {
   margin-bottom: 2rem;
-  width: max-content
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    .title-section {
+      flex: 1;
+      min-width: 300px;
+
+      h1 {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.75rem;
+        color: #3489eb;
+        margin: 0 0 0.5rem 0;
+
+        mat-icon {
+          color: #3489eb;
+        }
+      }
+
+      .subtitle {
+        color: #666;
+        font-size: 1rem;
+        margin: 0;
+        line-height: 1.4;
+      }
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+
+      .action-button {
+        min-width: 140px;
+        height: 48px;
+        font-weight: 500;
+
+        mat-icon {
+          margin-right: 0.5rem;
+        }
+
+        &[color="primary"] {
+          background-color: #4caf50;
+
+          &:hover {
+            background-color: #43a047;
+          }
+        }
+      }
+
+      @media (max-width: 768px) {
+        width: 100%;
+        justify-content: stretch;
+
+        .action-button {
+          flex: 1;
+          min-width: auto;
+        }
+      }
+    }
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: stretch;
+    }
+  }
+}
+
+.table-section {
+  margin-top: 1rem;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  border: 2px dashed #e0e0e0;
+
+  mat-icon {
+    font-size: 4rem;
+    width: 4rem;
+    height: 4rem;
+    margin-bottom: 1.5rem;
+    color: #4caf50;
+  }
+
+  h2 {
+    margin: 0 0 1rem 0;
+    color: #333;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  p {
+    margin: 0 0 2rem 0;
+    color: #666;
+    font-size: 1.1rem;
+    max-width: 400px;
+    line-height: 1.5;
+  }
+
+  .refresh-button {
+    min-width: 200px;
+    height: 48px;
+    font-weight: 500;
+
+    mat-icon {
+      margin-right: 0.5rem;
+      font-size: 1.2rem;
+      width: 1.2rem;
+      height: 1.2rem;
+    }
+  }
+}
+
+
+::ng-deep .success-snackbar {
+  background: #4caf50;
+  color: white;
+}
+
+::ng-deep .error-snackbar {
+  background: #f44336;
+  color: white;
+}
+
+::ng-deep .info-snackbar {
+  background: #2196f3;
+  color: white;
+}
+
+
+@media (max-width: 768px) {
+  .approval-requests-container {
+    padding: 0.5rem;
+  }
+
+  .header-card {
+    margin-bottom: 1.5rem;
+  }
 }

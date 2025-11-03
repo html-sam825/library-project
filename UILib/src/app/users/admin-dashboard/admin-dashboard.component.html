@@ -1,0 +1,335 @@
+<div class="admin-dashboard" [class.loading]="isLoading">
+  <!-- Loading Overlay -->
+  <div *ngIf="isLoading" class="loading-overlay">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Loading dashboard data...</p>
+  </div>
+
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <h1 class="page-title">Admin Dashboard</h1>
+      <div class="header-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="refreshData()"
+          [disabled]="isLoading"
+        >
+          <mat-icon>refresh</mat-icon>
+          {{ isLoading ? "Loading..." : "Refresh" }}
+        </button>
+      </div>
+    </div>
+    <p class="page-subtitle">
+      Welcome back, {{ adminName }}! Here's what's happening in your library.
+    </p>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid" [class.is-loading]="isLoading">
+    <!-- Total Books -->
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon total-books">
+            <mat-icon>library_books</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3 class="stat-number">{{ stats.totalBooks | number }}</h3>
+            <p class="stat-label">Total Books</p>
+            <span
+              class="stat-trend positive"
+              *ngIf="stats.booksAddedThisMonth > 0"
+            >
+              <mat-icon>trending_up</mat-icon>
+              +{{ stats.booksAddedThisMonth }} this month
+            </span>
+            <span
+              class="stat-trend neutral"
+              *ngIf="stats.booksAddedThisMonth === 0"
+            >
+              <mat-icon>minimize</mat-icon>
+              No new books this month
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Active Users -->
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon active-users">
+            <mat-icon>people</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3 class="stat-number">{{ stats.activeUsers | number }}</h3>
+            <p class="stat-label">Active Users</p>
+            <span
+              class="stat-trend positive"
+              *ngIf="stats.newUsersThisWeek > 0"
+            >
+              <mat-icon>trending_up</mat-icon>
+              +{{ stats.newUsersThisWeek }} this week
+            </span>
+            <span
+              class="stat-trend neutral"
+              *ngIf="stats.newUsersThisWeek === 0"
+            >
+              <mat-icon>minimize</mat-icon>
+              No new users this week
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Pending Approvals -->
+    <mat-card
+      class="stat-card"
+      (click)="navigateToApprovals()"
+      style="cursor: pointer"
+    >
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon pending-approvals">
+            <mat-icon>pending_actions</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3 class="stat-number">{{ stats.pendingApprovals | number }}</h3>
+            <p class="stat-label">Pending Approvals</p>
+            <span class="stat-trend warning" *ngIf="stats.pendingApprovals > 0">
+              <mat-icon>warning</mat-icon>
+              Needs attention
+            </span>
+            <span
+              class="stat-trend positive"
+              *ngIf="stats.pendingApprovals === 0"
+            >
+              <mat-icon>check_circle</mat-icon>
+              All caught up
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Active Orders -->
+    <mat-card class="stat-card">
+      <mat-card-content>
+        <div class="stat-content">
+          <div class="stat-icon active-orders">
+            <mat-icon>shopping_cart</mat-icon>
+          </div>
+          <div class="stat-info">
+            <h3 class="stat-number">{{ stats.activeOrders | number }}</h3>
+            <p class="stat-label">Active Orders</p>
+            <span class="stat-trend neutral">
+              <mat-icon>schedule</mat-icon>
+              {{ stats.overdueOrders }} overdue
+            </span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="content-grid">
+    <!-- Recent Activity -->
+    <mat-card class="content-card recent-activity">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>history</mat-icon>
+          Recent Activity
+        </mat-card-title>
+        <button mat-icon-button>
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="activity-list">
+          <div class="activity-item" *ngFor="let activity of recentActivities">
+            <div class="activity-icon">
+              <mat-icon [class]="activity.type">{{ activity.icon }}</mat-icon>
+            </div>
+            <div class="activity-details">
+              <p class="activity-description">{{ activity.description }}</p>
+              <span class="activity-time">{{ activity.time }}</span>
+            </div>
+          </div>
+          <div
+            class="no-data"
+            *ngIf="recentActivities.length === 0 && !isLoading"
+          >
+            <mat-icon>info</mat-icon>
+            <p>No recent activities</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Quick Actions -->
+    <mat-card class="content-card quick-actions">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>flash_on</mat-icon>
+          Quick Actions
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="actions-grid">
+          <button
+            mat-stroked-button
+            class="action-btn"
+            (click)="navigateTo('book-store')"
+          >
+            <mat-icon>add</mat-icon>
+            Add New Book
+          </button>
+          <button
+            mat-stroked-button
+            class="action-btn"
+            (click)="navigateTo('view-users')"
+          >
+            <mat-icon>person_add</mat-icon>
+            Manage Users
+          </button>
+          <button
+            mat-stroked-button
+            class="action-btn"
+            (click)="navigateTo('approval-requests')"
+          >
+            <mat-icon>how_to_reg</mat-icon>
+            Review Approvals
+          </button>
+          <button
+            mat-stroked-button
+            class="action-btn"
+            (click)="navigateTo('all-orders')"
+          >
+            <mat-icon>list_alt</mat-icon>
+            View All Orders
+          </button>
+          <button
+            mat-stroked-button
+            class="action-btn"
+            (click)="navigateTo('maintanance')"
+          >
+            <mat-icon>build</mat-icon>
+            Book Maintenance
+          </button>
+          <button
+            mat-stroked-button
+            class="action-btn"
+            (click)="navigateTo('return-book')"
+          >
+            <mat-icon>assignment_return</mat-icon>
+            Process Returns
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Pending Approvals Preview -->
+    <mat-card
+      class="content-card approvals-preview"
+      *ngIf="pendingApprovals.length > 0"
+    >
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>pending</mat-icon>
+          Pending Approval Requests
+        </mat-card-title>
+        <button mat-button color="primary" (click)="navigateToApprovals()">
+          View All
+        </button>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="approvals-list">
+          <div class="approval-item" *ngFor="let approval of pendingApprovals">
+            <div class="user-avatar">
+              {{ approval.firstName.charAt(0)
+              }}{{ approval.lastName.charAt(0) }}
+            </div>
+            <div class="approval-details">
+              <h4>{{ approval.firstName }} {{ approval.lastName }}</h4>
+              <p>{{ approval.email }}</p>
+              <span class="request-date"
+                >Requested {{ approval.requestDate }}</span
+              >
+            </div>
+            <div class="approval-actions">
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="approveUser(approval.id); $event.stopPropagation()"
+              >
+                <mat-icon>check</mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="rejectUser(approval.id); $event.stopPropagation()"
+              >
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- System Health -->
+    <mat-card class="content-card system-health">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>monitor_heart</mat-icon>
+          System Health
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="health-metrics">
+          <div class="metric">
+            <div class="metric-info">
+              <span class="metric-label">Server Status</span>
+              <span class="metric-value online">Online</span>
+            </div>
+            <mat-progress-bar
+              mode="determinate"
+              value="100"
+              color="primary"
+            ></mat-progress-bar>
+          </div>
+          <div class="metric">
+            <div class="metric-info">
+              <span class="metric-label">Database</span>
+              <span class="metric-value healthy">Healthy</span>
+            </div>
+            <mat-progress-bar
+              mode="determinate"
+              value="95"
+              color="primary"
+            ></mat-progress-bar>
+          </div>
+          <div class="metric">
+            <div class="metric-info">
+              <span class="metric-label">Storage Usage</span>
+              <span class="metric-value" [class.warning]="storageUsage > 80"
+                >{{ storageUsage }}%</span
+              >
+            </div>
+            <mat-progress-bar
+              mode="determinate"
+              [value]="storageUsage"
+              [color]="storageUsage > 80 ? 'warn' : 'primary'"
+            >
+            </mat-progress-bar>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

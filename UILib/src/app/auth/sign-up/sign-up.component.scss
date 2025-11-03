@@ -1,64 +1,150 @@
-// @use '../../../theme' as *;
-
-
 :host {
+  display: block;
+  width: 100%;
+  padding: 2rem;
+}
+
+.signup-container {
   display: flex;
-  justify-content: space-between;
-  border: 1px solid white;
-  height: 100%;
-  width: 900px;
-  
+  justify-content: center;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
 }
+
 .register-form {
-  width: 900px;
+  flex: 1;
+  max-width: 600px;
 
+  mat-card {
+    padding: 2rem;
 
-}
+    mat-card-header {
+      margin-bottom: 1.5rem;
 
-mat-card{
-mat-card-title {
-    display: flex;
-    justify-content: center;
-    color: #3489eb;
-  }
-  mat-card-title{
-    font-size: 2rem;
-    font-weight: bold;
-    text-align: center;
-  }
+      mat-card-title {
+        font-size: 2rem;
+        font-weight: bold;
+        text-align: center;
+        color: #3489eb;
+        margin: 0;
+      }
+    }
 
-
-  mat-grid-tile{
-    mat-form-field {
+    .full-width {
       width: 100%;
+    }
+
+    mat-grid-list {
       margin-bottom: 1rem;
+
+      mat-grid-tile {
+        padding: 0.5rem;
+      }
     }
-  }
-  mat-card-actions {
-        button {
-      margin:auto;
-      width: 80%;
+
+    .submit-button {
+      width: 100%;
+      height: 48px;
+      font-size: 1.1rem;
+
+      &:disabled {
+        cursor: not-allowed;
+      }
+
+      .spinner {
+        margin-right: 8px;
+      }
     }
-    h4{
-      margin:0;
-      padding-right:1rem ;
+
+    .login-redirect {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e0e0e0;
+
+      h4 {
+        margin: 0;
+        color: #666;
+      }
     }
   }
 }
-
 
 .library-info {
-  width: 400px;
-  padding: 1rem;
-  border-left: 1px solid white;
+  flex: 0 0 400px;
+  padding: 2rem;
+  background: rgba(52, 137, 235, 0.05);
+  border-radius: 12px;
+  border-left: 4px solid #3489eb;
 
-  mat-list-item{
-    height: auto;
-    p{
-      font-size: 1.2rem;
-      font-style:italic;
-      white-space: normal;
+  h1 {
+    color: #3489eb;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    font-size: 1.5rem;
+  }
+
+  mat-list {
+    mat-list-item {
+      height: auto;
+      margin-bottom: 1rem;
+      align-items: flex-start;
+
+      mat-icon[matListIcon] {
+        color: #3489eb;
+        margin-right: 1rem;
+        flex-shrink: 0;
+      }
+
+      p {
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #555;
+        margin: 0;
+        white-space: normal;
+      }
     }
   }
 
+  @media (max-width: 1024px) {
+    flex: none;
+    width: 100%;
+    max-width: 600px;
+  }
+}
+
+
+@media (max-width: 768px) {
+  :host {
+    padding: 1rem;
+  }
+
+  .register-form mat-card {
+    padding: 1.5rem;
+  }
+
+  .library-info {
+    padding: 1.5rem;
+  }
+}
+
+
+::ng-deep .error-snackbar {
+  background: #f44336;
+  color: white;
+}
+
+::ng-deep .success-snackbar {
+  background: #4caf50;
+  color: white;
 }

@@ -1,24 +1,136 @@
-mat-card{
-  width: max-content;
-  margin-bottom: 2rem;
+:host {
+  display: block;
+  padding: 2rem;
 }
+
+.maintenance-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.maintenance-card {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  mat-card-header {
+    margin-bottom: 1.5rem;
+
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      color: #3489eb;
+      margin: 0;
+
+      mat-icon {
+        color: #3489eb;
+      }
+    }
+  }
+
+  mat-card-content {
+    .form-row {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+  }
+}
+
 
 mat-form-field {
- margin-right: 1rem;
+  flex: 1;
+  min-width: 200px;
+
+  &.book-title {
+    flex: 2;
+    min-width: 300px;
+  }
+
+  &.book-author {
+    flex: 1.5;
+    min-width: 250px;
+  }
+
+  &.book-price {
+    flex: 0.5;
+    min-width: 120px;
+  }
+
+  &.category-select {
+    flex: 1;
+    min-width: 250px;
+  }
+
+  &.delete-field {
+    flex: 0.5;
+    min-width: 200px;
+  }
 }
 
-.category-select {
-  width: 400px;
+
+.action-button {
+  margin-top: 1rem;
+  min-width: 150px;
+  height: 48px;
+  font-weight: 500;
+
+  mat-icon {
+    margin-right: 0.5rem;
+  }
+
+  .button-spinner {
+    margin-right: 0.5rem;
+  }
+
+  &.delete-button {
+    background-color: #f44336;
+    color: white;
+
+    &:hover:not(:disabled) {
+      background-color: #d32f2f;
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
 }
 
-.book-title {
-  width: 500px;
+
+@media (max-width: 768px) {
+  :host {
+    padding: 1rem;
+  }
+
+  .maintenance-card {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  mat-form-field {
+    min-width: 100% !important;
+    flex: 1 1 100% !important;
+  }
 }
 
-.book-author {
-  width: 300px;
+
+::ng-deep .success-snackbar {
+  background: #4caf50;
+  color: white;
 }
 
-.book-price {
-  width:100px;
+::ng-deep .error-snackbar {
+  background: #f44336;
+  color: white;
 }
